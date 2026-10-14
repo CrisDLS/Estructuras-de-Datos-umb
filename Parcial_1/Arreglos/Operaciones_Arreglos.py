@@ -1,6 +1,9 @@
 import random
 import time
-from Arreglos.TDA_Array_Generica import Arreglo
+try:
+    from Arreglos.TDA_Array_Generica import Arreglo
+except ImportError:
+    from TDA_Array_Generica import Arreglo
 
 
 def probar_arreglo(etiqueta: str, datos: list):

@@ -1,6 +1,9 @@
 import random
 import time
-from Pilas.TDA_Pila_Generica import Pila
+try:
+    from Pilas.TDA_Pila_Generica import Pila
+except ImportError:
+    from TDA_Pila_Generica import Pila
 
 
 def probar_pila(etiqueta: str, datos: list):

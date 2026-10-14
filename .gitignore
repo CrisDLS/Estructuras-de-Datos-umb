@@ -1,21 +1,68 @@
-# Bytecode compilado de Python y cachés
+# ==========================================
+# C++ (Compilación y Binarios)
+# ==========================================
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.ilk
+*.pdb
+*.idb
+vc*.pdb
+build/
+bin/
+out/
+CMakeCache.txt
+CMakeFiles/
+
+# ==========================================
+# Java (Bytecode, Empaquetados e IDEs)
+# ==========================================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+target/
+.gradle/
+.settings/
+.project
+.classpath
+
+# ==========================================
+# Python (Caché y Entornos Virtuales)
+# ==========================================
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Configuración de entornos de desarrollo (por si usas VS Code o PyCharm)
-.vscode/
-.idea/
-
-# Entornos virtuales (útil si más adelante creas uno)
-venv/
+*.so
 .venv/
+venv/
 env/
 ENV/
+.pytest_cache/
+.mypy_cache/
 
-# Archivos temporales del sistema operativo
+# ==========================================
+# Entornos de Desarrollo / IDEs
+# ==========================================
+.idea/
+*.iml
+*.iws
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# Sistema Operativo y Basura Local
+# ==========================================
 .DS_Store
 Thumbs.db
-
-# Logs o reportes temporales
+desktop.ini
 *.log
