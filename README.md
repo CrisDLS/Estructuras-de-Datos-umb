@@ -9,8 +9,8 @@ Repositorio académico centralizado y estructurado como **monorepo modular** par
 
 | Parcial | Integrantes | Estructuras Evaluadas | Lenguajes |
 | :---: | :--- | :--- | :---: |
-| **Parcial 1** | Cris & Colaborador | Arreglos, Pilas, Colas, Listas | Python |
-| **Parcial 2** | Equipo de 3 (Cris, Compañera 1, Compañera 2) | Colas de Prioridad | C++, Python, Java |
+| **Parcial 1** | Cristian & Karen | Arreglos, Pilas, Colas, Listas | Python |
+| **Parcial 2** | Equipo de 3 (Cristian, Karen, Fatima) | Colas de Prioridad | C++, Python, Java |
 
 ---
 
@@ -40,11 +40,11 @@ Estructura_De_Datos/
         │   ├── main.cpp                       # Consola interactiva
         │   └── README.md                      # Instrucciones de compilación
         │
-        ├── python/                            # Implementación en Python (Compañera 1)
+        ├── python/                            # Implementación en Python (Fatima)
         │   ├── .gitkeep
         │   └── README.md                      # Guía de inicio y requerimientos
         │
-        └── java/                              # Implementación en Java (Compañera 2)
+        └── java/                              # Implementación en Java (Karen)
             ├── .gitkeep
             └── README.md                      # Guía de compilación y empaquetado
 ```
@@ -71,7 +71,7 @@ python Parcial_1/Pilas/Operaciones_Pilas.py
 ```bash
 cd Parcial_2/Colas_De_Prioridad/cpp
 g++ -std=c++11 -Wall main.cpp -o main
-.\main.exe   # En Linux/Mac: ./main
+.\main.exe
 ```
 
 #### Python (`Parcial_2/Colas_De_Prioridad/python/`)
