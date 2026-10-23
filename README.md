@@ -32,21 +32,30 @@ Estructura_De_Datos/
 │
 └── Parcial_2/                                 # Entregas del Segundo Parcial
     ├── README.md                              # Especificación de la práctica de Colas de Prioridad
-    └── Colas_De_Prioridad/
-        ├── cpp/                               # Implementación en C++ (Cris)
-        │   ├── ColaPrioridadNodos.h           # Cola con lista enlazada ordenada
-        │   ├── ColaPrioridadArreglo.h         # Cola con arreglo
-        │   ├── ColaPrioridadHeap.h            # Cola con montículo binario (heap)
-        │   ├── main.cpp                       # Consola interactiva
-        │   └── README.md                      # Instrucciones de compilación
-        │
-        ├── python/                            # Implementación en Python (Fatima)
-        │   ├── .gitkeep
-        │   └── README.md                      # Guía de inicio y requerimientos
-        │
-        └── java/                              # Implementación en Java (Karen)
-            ├── .gitkeep
-            └── README.md                      # Guía de compilación y empaquetado
+    ├── Colas_De_Prioridad/
+    │   ├── cpp/                               # Implementación en C++ (Cris)
+    │   │   ├── ColaPrioridadNodos.h           # Cola con lista enlazada ordenada
+    │   │   ├── ColaPrioridadArreglo.h         # Cola con arreglo
+    │   │   ├── ColaPrioridadHeap.h            # Cola con montículo binario (heap)
+    │   │   ├── main.cpp                       # Consola interactiva
+    │   │   └── README.md                      # Instrucciones de compilación
+    │   │
+    │   ├── python/                            # Implementación en Python (Fatima)
+    │   │   ├── .gitkeep
+    │   │   └── README.md                      # Guía de inicio y requerimientos
+    │   │
+    │   └── java/                              # Implementación en Java (Karen)
+    │       ├── .gitkeep
+    │       └── README.md                      # Guía de compilación y empaquetado
+    │
+    └── Listas_Enlazadas/                      # Implementación modular en Java
+        ├── README.md                          # Guía y distribución del equipo
+        ├── src/
+        │   ├── nodos/                         # Clases de nodos (Simple, Doble, Multi)
+        │   ├── listas/                        # Tipos de listas enlazadas
+        │   ├── app/                           # Punto de entrada (Main)
+        │   └── pruebas/                       # Casos de prueba
+        └── docs/                              # Diagrama de clases y reporte de pruebas
 ```
 
 ---
