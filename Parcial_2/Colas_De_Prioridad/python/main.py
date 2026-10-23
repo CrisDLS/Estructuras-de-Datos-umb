@@ -1,4 +1,4 @@
-from Cola_de_prioridad import ColaPrioridad
+from ColaPrioridad import ColaPrioridad
 
 def convertir_dato(valor):
     """Convierte el texto ingresado a su tipo real (bool, int, float o str)."""
