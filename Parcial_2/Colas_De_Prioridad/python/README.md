@@ -1,6 +1,6 @@
 # 🐍 Colas de Prioridad en Python
 
-**Responsable:** Compañera 1
+**Responsable:** Fatima
 
 Espacio dedicado para la implementación en **Python** de la Cola de Prioridad.
 
@@ -11,9 +11,7 @@ Espacio dedicado para la implementación en **Python** de la Cola de Prioridad.
 Puedes organizar tu código de la siguiente manera:
 ```text
 python/
-├── ColaPrioridadNodos.py    # Implementación con nodos / lista enlazada
-├── ColaPrioridadArreglo.py  # Implementación con listas nativas / arreglo
-├── ColaPrioridadHeap.py     # Implementación con montículo binario (heap)
+├── ColaPrioridad.py    # Implementación con listas
 ├── main.py                  # Menú de pruebas para el usuario
 └── README.md                # Este archivo de documentación
 ```
