@@ -1,6 +1,6 @@
 # ☕ Colas de Prioridad en Java
 
-**Responsable:** Compañera 2
+**Responsable:** Karen
 
 Espacio dedicado para la implementación en **Java** de la Cola de Prioridad.
 
@@ -28,7 +28,7 @@ java/
 javac *.java
 
 # Ejecutar el programa principal
-java Main
+java Simulador
 ```
 
 > **Consejo para el equipo:**
