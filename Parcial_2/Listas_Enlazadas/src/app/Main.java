@@ -13,7 +13,7 @@ public class Main {
 
     static void demostracion() {
         ListaEnlazada[] listas = {
-            new ListaSimple(), new ListaOrdenada(), new ListaDoble(), new ListaCircular()
+            new ListaSimple(), new ListaMulti(), new ListaDoble(), new ListaCircular()
         };
         for (ListaEnlazada l : listas) {
             llenar(l); // mismo código, comportamiento distinto
@@ -33,10 +33,10 @@ public class Main {
     }
 
     static void interactivo(Scanner in) {
-        System.out.println("Tipo de lista: 1) Simple 2) Ordenada 3) Doble 4) Circular");
+        System.out.println("Tipo de lista: 1) Simple 2) Multi 3) Doble 4) Circular");
         ListaEnlazada lista;
         switch (in.nextInt()) {
-            case 2:  lista = new ListaOrdenada(); break;
+            case 2:  lista = new ListaMulti();    break;
             case 3:  lista = new ListaDoble();    break;
             case 4:  lista = new ListaCircular(); break;
             default: lista = new ListaSimple();
@@ -67,4 +67,4 @@ public class Main {
             else if (op == 2) interactivo(in);
         } while (op != 0);
     }
-}
+} 
