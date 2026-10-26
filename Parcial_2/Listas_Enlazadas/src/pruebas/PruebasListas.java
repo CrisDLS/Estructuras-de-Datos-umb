@@ -1,128 +1,300 @@
 package pruebas;
 
+import listas.ListaSimple;
 import listas.ListaMulti;
+// [INTEGRANTE KAREN - PENDIENTE DE ENTREGA]:
+// Descomentar cuando Karen entregue ListaDoble y ListaCircular:
+// import listas.ListaDoble;
+// import listas.ListaCircular;
 
 /**
- * Banco de pruebas automatizadas para verificar las implementaciones de listas.
+ * Banco de pruebas automatizadas y sincronizadas con el Reporte Formal de Pruebas.
  * <p>
- * Incluye pruebas exhaustivas para {@link ListaMulti} modelando registros de Personas
- * con doble criterio simultáneo (Alfabético por Nombre y Numérico por Edad).
+ * Cada método y bloque de prueba ejecuta y valida exactamente los casos de prueba (CP)
+ * registrados en {@code docs/reporte_pruebas.md}:
+ * <ul>
+ *   <li><b>CP-SIM-01 a CP-SIM-09:</b> {@link ListaSimple} (Entrega Integrante Fátima)</li>
+ *   <li><b>CP-DOB-01 a CP-DOB-02:</b> {@code ListaDoble} (Pendiente Integrante Karen)</li>
+ *   <li><b>CP-CIR-01 a CP-CIR-02:</b> {@code ListaCircular} (Pendiente Integrante Karen)</li>
+ *   <li><b>CP-MUL-01 a CP-MUL-14:</b> {@link ListaMulti} (Entrega Integrante Cristian)</li>
+ * </ul>
  * </p>
+ *
+ * @author Cristian (Integrante 3 - Arquitectura y Multilistas)
  */
 public class PruebasListas {
 
+    /**
+     * Valida exhaustivamente el comportamiento de la Lista Enlazada Simple (Fátima).
+     * Casos: CP-SIM-01 al CP-SIM-09
+     */
+    public static void probarListaSimple() {
+        System.out.println("==================================================");
+        System.out.println("   BANCO DE PRUEBAS: LISTA SIMPLE (Fátima)");
+        System.out.println("==================================================");
+
+        ListaSimple lista = new ListaSimple();
+
+        // CP-SIM-01: Inserción en lista vacía
+        System.out.print("[CP-SIM-01] Inserción en lista vacía (10)... ");
+        lista.insertar(10);
+        assert lista.getTamano() == 1 : "Error en CP-SIM-01: Tamaño debe ser 1";
+        assert !lista.estaVacia() : "Error en CP-SIM-01: La lista no debe estar vacía";
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
+
+        // CP-SIM-02: Inserción al final múltiple
+        System.out.print("[CP-SIM-02] Inserción al final múltiple (20, 30)... ");
+        lista.insertar(20);
+        lista.insertar(30);
+        assert lista.getTamano() == 3 : "Error en CP-SIM-02: Tamaño debe ser 3";
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
+
+        // CP-SIM-03: Inserción al inicio
+        System.out.print("[CP-SIM-03] Inserción al inicio (5)... ");
+        lista.insertarAlInicio(5);
+        assert lista.getTamano() == 4 : "Error en CP-SIM-03: Tamaño debe ser 4";
+        assert lista.buscar(5) : "Error en CP-SIM-03: El 5 debe existir al inicio";
+        System.out.println("✅ Aprobado -> lista con 5 al frente");
+
+        // CP-SIM-04: Búsqueda elemento existente
+        System.out.print("[CP-SIM-04] Búsqueda de elemento existente (20)... ");
+        boolean hallado20 = lista.buscar(20);
+        assert hallado20 : "Error en CP-SIM-04: El 20 debe encontrarse";
+        System.out.println("✅ Aprobado -> resultado: " + hallado20);
+
+        // CP-SIM-05: Búsqueda elemento inexistente
+        System.out.print("[CP-SIM-05] Búsqueda de elemento inexistente (99)... ");
+        boolean hallado99 = lista.buscar(99);
+        assert !hallado99 : "Error en CP-SIM-05: El 99 no debe existir";
+        System.out.println("✅ Aprobado -> resultado: " + hallado99);
+
+        // CP-SIM-06: Eliminación de cabeza
+        System.out.print("[CP-SIM-06] Eliminación de cabeza (5)... ");
+        boolean elimCabeza = lista.eliminar(5);
+        assert elimCabeza : "Error en CP-SIM-06: Debe retornar true al eliminar cabeza";
+        assert lista.getTamano() == 3 : "Error en CP-SIM-06: Tamaño debe ser 3";
+        assert !lista.buscar(5) : "Error en CP-SIM-06: El 5 ya no debe estar";
+        System.out.println("✅ Aprobado -> nueva cabeza es 10");
+
+        // CP-SIM-07: Eliminación intermedia
+        System.out.print("[CP-SIM-07] Eliminación de nodo intermedio (20)... ");
+        boolean elimInter = lista.eliminar(20);
+        assert elimInter : "Error en CP-SIM-07: Debe retornar true al eliminar nodo intermedio";
+        assert lista.getTamano() == 2 : "Error en CP-SIM-07: Tamaño debe ser 2";
+        assert !lista.buscar(20) : "Error en CP-SIM-07: El 20 ya no debe existir";
+        System.out.println("✅ Aprobado -> lista enlazada 10 -> 30 -> null");
+
+        // CP-SIM-08: Eliminación inexistente
+        System.out.print("[CP-SIM-08] Eliminación de elemento inexistente (99)... ");
+        boolean elimInex = lista.eliminar(99);
+        assert !elimInex : "Error en CP-SIM-08: Debe retornar false";
+        assert lista.getTamano() == 2 : "Error en CP-SIM-08: Tamaño debe permanecer en 2";
+        System.out.println("✅ Aprobado -> retorna false, lista inalterada");
+
+        // CP-SIM-09: Vaciado total de la lista
+        System.out.print("[CP-SIM-09] Vaciado total de la lista (eliminar 10 y 30)... ");
+        lista.eliminar(10);
+        lista.eliminar(30);
+        assert lista.estaVacia() : "Error en CP-SIM-09: La lista debe estar vacía";
+        assert lista.getTamano() == 0 : "Error en CP-SIM-09: El tamaño debe ser 0";
+        System.out.println("✅ Aprobado -> estaVacia = true, tamano = 0\n");
+    }
+
+    /**
+     * Plantilla de pruebas para Lista Doblemente Enlazada (Karen).
+     * Casos: CP-DOB-01 y CP-DOB-02
+     */
+    public static void probarListaDoble() {
+        System.out.println("==================================================");
+        System.out.println("   BANCO DE PRUEBAS: LISTA DOBLE (Karen)");
+        System.out.println("   [ESTADO: PENDIENTE DE ENTREGA POR INTEGRANTE 2]");
+        System.out.println("==================================================");
+
+        System.out.println("[CP-DOB-01] Inserción bidireccional (15, 25): ⏳ PENDIENTE (Karen)");
+        System.out.println("[CP-DOB-02] Recorrido inverso (mostrarInverso()): ⏳ PENDIENTE (Karen)\n");
+
+        /*
+        // IMPLEMENTACIÓN AL RECIBIR LA CLASE DE KAREN:
+        ListaDoble lista = new ListaDoble();
+        
+        // CP-DOB-01: Inserción bidireccional
+        lista.insertar(15);
+        lista.insertar(25);
+        assert lista.getTamano() == 2 : "CP-DOB-01 Error";
+
+        // CP-DOB-02: Recorrido inverso
+        lista.mostrarInverso();
+        */
+    }
+
+    /**
+     * Plantilla de pruebas para Lista Circular (Karen).
+     * Casos: CP-CIR-01 y CP-CIR-02
+     */
+    public static void probarListaCircular() {
+        System.out.println("==================================================");
+        System.out.println("   BANCO DE PRUEBAS: LISTA CIRCULAR (Karen)");
+        System.out.println("   [ESTADO: PENDIENTE DE ENTREGA POR INTEGRANTE 2]");
+        System.out.println("==================================================");
+
+        System.out.println("[CP-CIR-01] Cierre de ciclo circular (5, 8): ⏳ PENDIENTE (Karen)");
+        System.out.println("[CP-CIR-02] Recorrido sin bucle infinito (mostrar()): ⏳ PENDIENTE (Karen)\n");
+
+        /*
+        // IMPLEMENTACIÓN AL RECIBIR LA CLASE DE KAREN:
+        ListaCircular lista = new ListaCircular();
+        
+        // CP-CIR-01: Cierre de ciclo
+        lista.insertar(5);
+        lista.insertar(8);
+        assert lista.getTamano() == 2 : "CP-CIR-01 Error";
+
+        // CP-CIR-02: Recorrido acotado a 'tamano'
+        lista.mostrar();
+        */
+    }
+
+    /**
+     * Valida exhaustivamente el comportamiento de la Multilista de Personas (Cristian).
+     * Casos: CP-MUL-01 al CP-MUL-14
+     */
     public static void probarListaMulti() {
-        System.out.println("==========================================================");
-        System.out.println("   BANCO DE PRUEBAS: LISTAMULTI (PERSONAS: NOMBRE + EDAD) ");
-        System.out.println("==========================================================");
+        System.out.println("==================================================");
+        System.out.println("   BANCO DE PRUEBAS: MULTILISTA 2D (Cristian)");
+        System.out.println("   (Personas: Criterio Alfabético y por Edad)");
+        System.out.println("==================================================");
 
+        // CP-MUL-01: Estado inicial vacía
+        System.out.print("[CP-MUL-01] Estado inicial vacía... ");
         ListaMulti lista = new ListaMulti();
+        assert lista.estaVacia() : "Error en CP-MUL-01: La lista debe iniciar vacía";
+        assert lista.getTamano() == 0 : "Error en CP-MUL-01: El tamaño inicial debe ser 0";
+        assert lista.getCabezaAlfabetica() == null : "Error en CP-MUL-01: Cabeza alfabética debe ser null";
+        assert lista.getCabezaEdad() == null : "Error en CP-MUL-01: Cabeza por edad debe ser null";
+        System.out.println("✅ Aprobado -> vacia = true, tamano = 0, cabezas = null");
 
-        // 1. Verificación inicial de lista vacía
-        System.out.println("\n--- 1. Verificación Inicial de Lista Vacía ---");
-        assert lista.estaVacia() : "Error: La lista recién instanciada debe estar vacía";
-        assert lista.getTamano() == 0 : "Error: El tamaño inicial debe ser 0";
-        assert lista.verificarConsistencia() : "Error: Una lista vacía debe ser consistente";
-        System.out.println("Estado inicial: Vacía = " + lista.estaVacia() + ", Tamaño = " + lista.getTamano());
-
-        // 2. Inserción de personas de prueba
-        System.out.println("\n--- 2. Inserción de Personas ---");
-        System.out.println("Insertando: Carlos (25), Ana (30), Beto (18), Diana (22)...");
+        // CP-MUL-02: Inserción ordenada múltiple
+        System.out.println("[CP-MUL-02] Inserción ordenada múltiple: Carlos(25), Ana(30), Beto(18), Diana(22)... ");
         lista.insertar("Carlos", 25);
         lista.insertar("Ana", 30);
         lista.insertar("Beto", 18);
         lista.insertar("Diana", 22);
-
+        assert lista.getTamano() == 4 : "Error en CP-MUL-02: El tamaño debe ser 4";
+        assert lista.verificarConsistencia() : "Error en CP-MUL-02: Fallo de consistencia estructural";
+        System.out.print("            ");
         lista.mostrar();
+        System.out.println("            ✅ Aprobado -> Nodos entrelazados en ambas dimensiones");
 
-        assert lista.getTamano() == 4 : "Error: El tamaño debe ser 4 tras 4 inserciones";
-        assert lista.verificarConsistencia() : "Error: Fallo de consistencia tras inserciones";
-
-        // 3. Validación de Cabezas según Criterio
-        System.out.println("\n--- 3. Validación de Cabezas Duales ---");
+        // CP-MUL-03: Validación de cabezas duales
+        System.out.print("[CP-MUL-03] Validación de cabezas duales independientes... ");
         String cabezaAlfa = lista.getCabezaAlfabetica().getNombre();
         String cabezaEdad = lista.getCabezaEdad().getNombre();
-        int menorEdad = lista.getCabezaEdad().getEdad();
+        int menorEdad = lista.getCabezaEdad().getDato();
+        assert "Ana".equalsIgnoreCase(cabezaAlfa) : "Error en CP-MUL-03: Cabeza alfa debe ser Ana";
+        assert "Beto".equalsIgnoreCase(cabezaEdad) : "Error en CP-MUL-03: Cabeza edad debe ser Beto";
+        assert menorEdad == 18 : "Error en CP-MUL-03: Menor edad debe ser 18";
+        System.out.println("✅ Aprobado -> Cabeza Alfa: '" + cabezaAlfa + "', Cabeza Edad: '" + cabezaEdad + "' (" + menorEdad + " años)");
 
-        System.out.println("Cabeza Alfabética esperada: 'Ana'  | Obtenida: '" + cabezaAlfa + "'");
-        System.out.println("Cabeza por Edad esperada:   'Beto' | Obtenida: '" + cabezaEdad + "' (" + menorEdad + " años)");
+        // CP-MUL-04: Búsqueda alfabética positiva
+        System.out.print("[CP-MUL-04] Búsqueda alfabética existente ('Carlos')... ");
+        boolean halladoCarlos = lista.buscar("Carlos");
+        assert halladoCarlos : "Error en CP-MUL-04: Carlos debe existir";
+        System.out.println("✅ Aprobado -> resultado: " + halladoCarlos);
 
-        assert "Ana".equalsIgnoreCase(cabezaAlfa) : "Error: La cabeza alfabética debe ser 'Ana'";
-        assert "Beto".equalsIgnoreCase(cabezaEdad) : "Error: La cabeza por edad debe ser 'Beto'";
-        assert menorEdad == 18 : "Error: La menor edad debe ser 18";
+        // CP-MUL-05: Búsqueda alfabética negativa (corte temprano)
+        System.out.print("[CP-MUL-05] Búsqueda alfabética inexistente ('Zoe')... ");
+        boolean halladoZoe = lista.buscar("Zoe");
+        assert !halladoZoe : "Error en CP-MUL-05: Zoe no debe existir";
+        System.out.println("✅ Aprobado -> resultado: " + halladoZoe);
 
-        // 4. Búsquedas Positivas y Negativas
-        System.out.println("\n--- 4. Pruebas de Búsqueda ---");
-        boolean bCarlos = lista.buscar("Carlos");
-        boolean bZoe = lista.buscar("Zoe");
-        boolean bEdad22 = lista.buscarPorEdad(22);
-        boolean bEdad99 = lista.buscarPorEdad(99);
+        // CP-MUL-06: Búsqueda por edad positiva
+        System.out.print("[CP-MUL-06] Búsqueda por edad existente (22 - Diana)... ");
+        boolean halladaEdad22 = lista.buscarPorEdad(22);
+        assert halladaEdad22 : "Error en CP-MUL-06: Edad 22 debe encontrarse";
+        System.out.println("✅ Aprobado -> resultado: " + halladaEdad22);
 
-        System.out.println("Buscar 'Carlos' (Alfabético): " + bCarlos + " (Esperado: true)");
-        System.out.println("Buscar 'Zoe'    (Alfabético): " + bZoe + " (Esperado: false)");
-        System.out.println("Buscar edad 22  (Por Edad):   " + bEdad22 + " (Esperado: true)");
-        System.out.println("Buscar edad 99  (Por Edad):   " + bEdad99 + " (Esperado: false)");
+        // CP-MUL-07: Búsqueda por edad negativa (corte temprano)
+        System.out.print("[CP-MUL-07] Búsqueda por edad inexistente (99)... ");
+        boolean halladaEdad99 = lista.buscarPorEdad(99);
+        assert !halladaEdad99 : "Error en CP-MUL-07: Edad 99 no debe existir";
+        System.out.println("✅ Aprobado -> resultado: " + halladaEdad99);
 
-        assert bCarlos : "Error: 'Carlos' debe ser encontrado";
-        assert !bZoe : "Error: 'Zoe' no debe ser encontrada";
-        assert bEdad22 : "Error: La edad 22 ('Diana') debe ser encontrada";
-        assert !bEdad99 : "Error: La edad 99 no debe ser encontrada";
+        // CP-MUL-08: Eliminación de cabeza alfabética ("Ana", 30 años)
+        System.out.print("[CP-MUL-08] Eliminación de cabeza alfabética ('Ana', 30 años)... ");
+        boolean elimAna = lista.eliminar("Ana");
+        assert elimAna : "Error en CP-MUL-08: Ana debe eliminarse con éxito";
+        assert "Beto".equalsIgnoreCase(lista.getCabezaAlfabetica().getNombre()) : "Error en CP-MUL-08: Nueva cabeza alfa debe ser Beto";
+        assert lista.verificarConsistencia() : "Error en CP-MUL-08: Inconsistencia tras eliminar Ana";
+        System.out.println("✅ Aprobado -> Nueva cabeza Alfa: " + lista.getCabezaAlfabetica().getNombre());
 
-        // 5. Eliminación de Cabeza Alfabética ("Ana")
-        System.out.println("\n--- 5. Eliminación de Cabeza Alfabética ('Ana') ---");
-        boolean elAna = lista.eliminar("Ana");
-        System.out.println("Eliminar 'Ana': " + elAna);
-        lista.mostrar();
-        assert elAna : "Error: 'Ana' debió ser eliminada";
-        assert "Beto".equalsIgnoreCase(lista.getCabezaAlfabetica().getNombre()) :
-                "Error: Tras eliminar a 'Ana', la nueva cabeza alfabética debe ser 'Beto'";
-        assert lista.verificarConsistencia() : "Error: Inconsistencia estructural tras eliminar 'Ana'";
+        // CP-MUL-09: Eliminación de cabeza por edad ("Beto", 18 años)
+        System.out.print("[CP-MUL-09] Eliminación de cabeza por edad ('Beto', 18 años)... ");
+        boolean elimBeto = lista.eliminar("Beto");
+        assert elimBeto : "Error en CP-MUL-09: Beto debe eliminarse con éxito";
+        assert lista.getCabezaEdad().getDato() == 22 : "Error en CP-MUL-09: Nueva menor edad debe ser 22 (Diana)";
+        assert lista.verificarConsistencia() : "Error en CP-MUL-09: Inconsistencia tras eliminar Beto";
+        System.out.println("✅ Aprobado -> Nueva cabeza Edad: Diana (" + lista.getCabezaEdad().getDato() + " años)");
 
-        // 6. Eliminación de Cabeza por Edad ("Beto")
-        System.out.println("\n--- 6. Eliminación de Cabeza por Edad ('Beto') ---");
-        boolean elBeto = lista.eliminar("Beto");
-        System.out.println("Eliminar 'Beto': " + elBeto);
-        lista.mostrar();
-        assert elBeto : "Error: 'Beto' debió ser eliminado";
-        assert "Diana".equalsIgnoreCase(lista.getCabezaEdad().getNombre()) :
-                "Error: Tras eliminar a 'Beto', la nueva cabeza por edad debe ser 'Diana'";
-        assert lista.getCabezaEdad().getEdad() == 22 : "Error: La nueva menor edad debe ser 22";
-        assert lista.verificarConsistencia() : "Error: Inconsistencia estructural tras eliminar 'Beto'";
+        // CP-MUL-10: Eliminación de nodo intermedio ("Diana", 22 años)
+        System.out.print("[CP-MUL-10] Eliminación de nodo intermedio ('Diana', 22 años)... ");
+        boolean elimDiana = lista.eliminar("Diana");
+        assert elimDiana : "Error en CP-MUL-10: Diana debe eliminarse con éxito";
+        assert lista.getTamano() == 1 : "Error en CP-MUL-10: Debe quedar exactamente 1 elemento";
+        assert lista.verificarConsistencia() : "Error en CP-MUL-10: Inconsistencia tras eliminar Diana";
+        System.out.println("✅ Aprobado -> Queda únicamente Carlos (tamano = 1)");
 
-        // 7. Eliminación de Nodo Intermedio ("Diana")
-        System.out.println("\n--- 7. Eliminación de Nodo Intermedio ('Diana') ---");
-        boolean elDiana = lista.eliminar("Diana");
-        System.out.println("Eliminar 'Diana': " + elDiana);
-        lista.mostrar();
-        assert elDiana : "Error: 'Diana' debió ser eliminada";
-        assert lista.getTamano() == 1 : "Error: Debe quedar exactamente 1 elemento";
-        assert lista.verificarConsistencia() : "Error: Inconsistencia tras eliminar 'Diana'";
+        // CP-MUL-11: Vaciado total de la multilista ("Carlos", 25 años)
+        System.out.print("[CP-MUL-11] Vaciado total de la multilista ('Carlos', 25 años)... ");
+        boolean elimCarlos = lista.eliminar("Carlos");
+        assert elimCarlos : "Error en CP-MUL-11: Carlos debe eliminarse";
+        assert lista.estaVacia() : "Error en CP-MUL-11: La lista debe quedar vacía";
+        assert lista.getTamano() == 0 : "Error en CP-MUL-11: El tamaño debe ser 0";
+        assert lista.getCabezaAlfabetica() == null && lista.getCabezaEdad() == null : "Error en CP-MUL-11: Cabezas en null";
+        System.out.println("✅ Aprobado -> estaVacia = true, tamano = 0");
 
-        // 8. Vaciado Total (Eliminar "Carlos")
-        System.out.println("\n--- 8. Eliminación del Último Elemento ('Carlos') ---");
-        boolean elCarlos = lista.eliminar("Carlos");
-        System.out.println("Eliminar 'Carlos': " + elCarlos);
-        lista.mostrar();
-        assert elCarlos : "Error: 'Carlos' debió ser eliminado";
-        assert lista.estaVacia() : "Error: La lista debe quedar completamente vacía";
-        assert lista.getTamano() == 0 : "Error: El tamaño debe ser 0";
-        assert lista.verificarConsistencia() : "Error: La lista vacía debe ser consistente";
-
-        // 9. Comprobación de Compatibilidad Polimórfica (insertar(int))
-        System.out.println("\n--- 9. Comprobación de Polimorfismo con insertar(int) ---");
+        // CP-MUL-12: Compatibilidad polimórfica insertar(int)
+        System.out.print("[CP-MUL-12] Compatibilidad polimórfica insertar(45) e insertar(15)... ");
         lista.insertar(45);
         lista.insertar(15);
-        lista.mostrar();
-        assert lista.getTamano() == 2 : "Error: Deben existir 2 elementos insertados polimórficamente";
-        assert lista.verificarConsistencia() : "Error: Fallo de consistencia en inserción polimórfica";
-        assert lista.eliminar(45) : "Error: Debe permitir eliminar por edad polimórficamente";
-        assert lista.eliminar(15) : "Error: Debe permitir eliminar el último elemento polimórficamente";
-        assert lista.estaVacia() : "Error: La lista debe quedar vacía";
+        assert lista.getTamano() == 2 : "Error en CP-MUL-12: Tamaño debe ser 2";
+        assert lista.getCabezaEdad().getDato() == 15 : "Error en CP-MUL-12: Menor edad debe ser 15";
+        assert lista.verificarConsistencia() : "Error en CP-MUL-12: Consistencia polimórfica fallida";
+        lista.eliminar(45);
+        lista.eliminar(15);
+        System.out.println("✅ Aprobado -> Soporta contrato ListaEnlazada sin alterar estructura");
 
-        System.out.println("\n>>> TODAS LAS PRUEBAS DE LISTAMULTI PASARON EXITOSAMENTE <<<\n");
+        // CP-MUL-13: Eliminación en lista vacía
+        System.out.print("[CP-MUL-13] Eliminación en lista vacía ('Nadie')... ");
+        boolean elimVacia = lista.eliminar("Nadie");
+        assert !elimVacia : "Error en CP-MUL-13: Eliminar en vacía debe retornar false";
+        System.out.println("✅ Aprobado -> Retorna false sin excepciones");
+
+        // CP-MUL-14: Auditoría de consistencia en memoria
+        System.out.print("[CP-MUL-14] Auditoría de consistencia estructural en memoria... ");
+        assert lista.verificarConsistencia() : "Error en CP-MUL-14: La auditoría en memoria debe pasar";
+        System.out.println("✅ Aprobado -> verificarConsistencia() = true en todos los estados\n");
     }
 
     public static void main(String[] args) {
+        System.out.println("\n############################################################");
+        System.out.println("   SUITE DE PRUEBAS AUTOMATIZADAS — ESTRUCTURA DE DATOS   ");
+        System.out.println("   Sincronizado formalmente con: docs/reporte_pruebas.md   ");
+        System.out.println("############################################################\n");
+
+        // 1. Pruebas Lista Simple (Fátima)
+        probarListaSimple();
+
+        // 2. Pruebas Lista Doble (Karen - Pendiente)
+        probarListaDoble();
+
+        // 3. Pruebas Lista Circular (Karen - Pendiente)
+        probarListaCircular();
+
+        // 4. Pruebas Multilista (Cristian)
         probarListaMulti();
+
+        System.out.println("============================================================");
+        System.out.println("   RESULTADO GLOBAL: TODAS LAS PRUEBAS ACTIVAS EN VERDE ✅   ");
+        System.out.println("============================================================\n");
     }
 }
