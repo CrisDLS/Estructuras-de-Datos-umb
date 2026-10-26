@@ -1,6 +1,6 @@
 # Diagrama de Clases - Listas Enlazadas
 
-Diagrama de clases UML del módulo `src` para las listas enlazadas y sus respectivos nodos.
+Diagrama de clases UML del módulo `src` para las listas enlazadas y sus respectivos nodos, incorporando la modelación de personas (Nombre + Edad) en la Multilista.
 
 ```mermaid
 classDiagram
@@ -20,11 +20,17 @@ classDiagram
             -NodoDoble anterior
         }
         class NodoMulti {
-            -NodoMulti siguienteSecundario
-            +NodoMulti(int dato)
-            +NodoMulti(int dato, Nodo siguiente, NodoMulti siguienteSecundario)
-            +getSiguienteSecundario() NodoMulti
-            +setSiguienteSecundario(NodoMulti) void
+            -String nombre
+            -NodoMulti siguienteEdad
+            +NodoMulti(String nombre, int edad)
+            +NodoMulti(int edad)
+            +NodoMulti(String nombre, int edad, Nodo siguiente, NodoMulti siguienteEdad)
+            +getNombre() String
+            +setNombre(String) void
+            +getEdad() int
+            +setEdad(int) void
+            +getSiguienteEdad() NodoMulti
+            +setSiguienteEdad(NodoMulti) void
             +getSiguienteMulti() NodoMulti
             +toString() String
         }
@@ -53,17 +59,21 @@ classDiagram
         class ListaCircular {
         }
         class ListaMulti {
-            #NodoMulti cabezaSecundaria
+            #NodoMulti cabezaEdad
             +ListaMulti()
+            +insertar(String nombre, int edad) void
             +insertar(int dato) void
+            +eliminar(String nombre) boolean
             +eliminar(int dato) boolean
-            +buscarCriterioSecundario(int dato) boolean
+            +buscar(String nombre) boolean
+            +buscarPorEdad(int edad) boolean
+            +buscarNodo(String nombre) NodoMulti
             +mostrar() void
-            +mostrarCriterioPrimario() void
-            +mostrarCriterioSecundario() void
+            +mostrarAlfabetico() void
+            +mostrarPorEdad() void
             +limpiar() void
-            +getCabezaSecundaria() NodoMulti
-            +getCabezaMulti() NodoMulti
+            +getCabezaAlfabetica() NodoMulti
+            +getCabezaEdad() NodoMulti
             +verificarConsistencia() boolean
         }
     }
