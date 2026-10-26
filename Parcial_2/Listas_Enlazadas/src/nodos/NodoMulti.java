@@ -1,84 +1,118 @@
 package nodos;
 
 /**
- * Representa un nodo para una Multilista (Lista Multienlazada).
+ * Representa un nodo multienlazado que modela a una Persona dentro de una Multilista.
  * <p>
- * Extiende de la clase base {@link Nodo}, heredando el almacenamiento del dato primitivo
- * {@code int} y la referencia al enlace primario ({@code siguiente}). Adicionalmente,
- * incorpora una segunda referencia de enlace ({@code siguienteSecundario}) que permite
- * hilar el mismo nodo a través de un segundo criterio o dimensión de recorrido.
+ * Extiende de {@link Nodo}, reutilizando el atributo {@code dato} para almacenar
+ * la edad de la persona (accedida mediante {@code super(edad)}) y la referencia {@code siguiente}
+ * para el <b>Criterio 1 (Orden Alfabético por Nombre)</b>.
+ * Incorpora un atributo específico para el nombre y una referencia {@code siguienteEdad}
+ * para el <b>Criterio 2 (Orden Numérico Ascendente por Edad)</b>.
  * </p>
  *
  * <h3>Estructura del Nodo en Memoria:</h3>
  * <pre>
- *   +-----------------------------------------------+
- *   |                   NodoMulti                   |
- *   +-----------------------------------------------+
- *   | dato: int (heredado de Nodo)                  |
- *   | siguiente: Nodo (heredado, Criterio 1)        |
- *   | siguienteSecundario: NodoMulti (Criterio 2)   |
- *   +-----------------------------------------------+
+ *   +-------------------------------------------------------+
+ *   |                       NodoMulti                       |
+ *   +-------------------------------------------------------+
+ *   | nombre: String                                        |
+ *   | dato: int (heredado de Nodo, representa la edad)      |
+ *   | siguiente: Nodo (heredado, Criterio 1: Alfabético)   |
+ *   | siguienteEdad: NodoMulti (Criterio 2: Por Edad)       |
+ *   +-------------------------------------------------------+
  * </pre>
- *
- * @author Cristian (Integrante 3)
- * @version 1.0
  */
 public class NodoMulti extends Nodo {
 
     /**
-     * Referencia al siguiente nodo bajo el segundo criterio de enlace
-     * (por ejemplo: orden numérico ascendente, dimensión vertical o categoría).
+     * Nombre de la persona. Criterio base para el recorrido alfabético.
      */
-    private NodoMulti siguienteSecundario;
+    private String nombre;
 
     /**
-     * Constructor principal que inicializa el dato del nodo.
-     * Ambos punteros de enlace (primario y secundario) inician en {@code null}.
-     *
-     * @param dato Valor entero almacenado en el nodo.
+     * Referencia al siguiente nodo según el orden numérico de edad (de menor a mayor).
      */
-    public NodoMulti(int dato) {
-        super(dato);
-        this.siguienteSecundario = null;
+    private NodoMulti siguienteEdad;
+
+    /**
+     * Constructor principal que inicializa nombre y edad de la persona.
+     *
+     * @param nombre Nombre de la persona.
+     * @param edad Edad en años (almacenada en {@code dato} de la superclase).
+     */
+    public NodoMulti(String nombre, int edad) {
+        super(edad);
+        this.nombre = nombre;
+        this.siguienteEdad = null;
     }
 
     /**
-     * Constructor sobrecargado que permite especificar enlaces iniciales.
+     * Constructor sobrecargado para compatibilidad numérica directa.
+     * Asigna un nombre predeterminado con el formato {@code "Persona-" + edad}.
      *
-     * @param dato Valor entero almacenado.
-     * @param siguiente Referencia al siguiente nodo en el criterio primario.
-     * @param siguienteSecundario Referencia al siguiente nodo en el criterio secundario.
+     * @param edad Edad en años.
      */
-    public NodoMulti(int dato, Nodo siguiente, NodoMulti siguienteSecundario) {
-        super(dato);
+    public NodoMulti(int edad) {
+        this("Persona-" + edad, edad);
+    }
+
+    /**
+     * Constructor sobrecargado con enlaces explícitos.
+     *
+     * @param nombre Nombre de la persona.
+     * @param edad Edad en años.
+     * @param siguiente Referencia al siguiente nodo en orden alfabético.
+     * @param siguienteEdad Referencia al siguiente nodo en orden de edad.
+     */
+    public NodoMulti(String nombre, int edad, Nodo siguiente, NodoMulti siguienteEdad) {
+        super(edad);
+        this.nombre = nombre;
         this.setSiguiente(siguiente);
-        this.siguienteSecundario = siguienteSecundario;
+        this.siguienteEdad = siguienteEdad;
+    }
+
+    // ==========================================
+    // GETTERS Y SETTERS
+    // ==========================================
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     /**
-     * Obtiene el siguiente nodo bajo el criterio secundario.
+     * Obtiene la edad de la persona (alias de conveniencia sobre {@code getDato()}).
      *
-     * @return El {@link NodoMulti} enlazado secundariamente, o {@code null} si es el final.
+     * @return La edad almacenada en el nodo.
      */
-    public NodoMulti getSiguienteSecundario() {
-        return siguienteSecundario;
+    public int getEdad() {
+        return getDato();
     }
 
     /**
-     * Establece el siguiente nodo bajo el criterio secundario.
+     * Establece la edad de la persona (alias de conveniencia sobre {@code setDato(int)}).
      *
-     * @param siguienteSecundario Nuevo nodo a enlazar en el segundo criterio.
+     * @param edad Nueva edad a asignar.
      */
-    public void setSiguienteSecundario(NodoMulti siguienteSecundario) {
-        this.siguienteSecundario = siguienteSecundario;
+    public void setEdad(int edad) {
+        setDato(edad);
+    }
+
+    public NodoMulti getSiguienteEdad() {
+        return siguienteEdad;
+    }
+
+    public void setSiguienteEdad(NodoMulti siguienteEdad) {
+        this.siguienteEdad = siguienteEdad;
     }
 
     /**
-     * Método de conveniencia tipado para obtener el siguiente nodo del criterio primario
-     * como una instancia de {@link NodoMulti}, facilitando recorridos específicos de multilista
-     * sin necesidad de continuos casteos manuales.
+     * Retorna el siguiente nodo en el criterio alfabético tipado directamente como {@link NodoMulti}.
      *
-     * @return El siguiente {@link NodoMulti} en el enlace primario, o {@code null} si es el final.
+     * @return El siguiente {@link NodoMulti} en la cadena alfabética, o {@code null} si es el último.
      */
     public NodoMulti getSiguienteMulti() {
         return (NodoMulti) super.getSiguiente();
@@ -86,10 +120,6 @@ public class NodoMulti extends Nodo {
 
     @Override
     public String toString() {
-        return "NodoMulti{" +
-                "dato=" + getDato() +
-                ", sigPrimario=" + (getSiguiente() != null ? getSiguiente().getDato() : "null") +
-                ", sigSecundario=" + (siguienteSecundario != null ? siguienteSecundario.getDato() : "null") +
-                '}';
+        return nombre + " (" + getEdad() + ")";
     }
 }
