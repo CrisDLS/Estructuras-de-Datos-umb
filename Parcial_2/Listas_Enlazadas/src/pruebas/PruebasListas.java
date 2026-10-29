@@ -6,17 +6,40 @@ import listas.ListaDoble;
 import listas.ListaCircular;
 
 /**
- * Banco de pruebas automatizadas y sincronizadas con el Reporte Formal de Pruebas.
- * <p>
- * Cada método y bloque de prueba ejecuta y valida exactamente los casos de prueba (CP)
- * registrados en {@code docs/reporte_pruebas.md}:
- * <ul>
- *   <li><b>CP-SIM-01 a CP-SIM-09:</b> {@link ListaSimple}</li>
- *   <li><b>CP-DOB-01 a CP-DOB-09:</b> {@link ListaDoble}</li>
- *   <li><b>CP-CIR-01 a CP-CIR-09:</b> {@link ListaCircular}</li>
- *   <li><b>CP-MUL-01 a CP-MUL-14:</b> {@link ListaMulti}</li>
- * </ul>
- * </p>
+ * =====================================================================================
+ *  SUITE DE PRUEBAS AUTOMATIZADAS — LISTAS ENLAZADAS (ESTRUCTURA DE DATOS)
+ * =====================================================================================
+ *
+ *  JUSTIFICACIÓN DEL USO DE ASERCIONES ('assert'):
+ *  1. Rigor de Ingeniería de Software:
+ *     A diferencia de un simple 'System.out.println' que solo imprime mensajes cosméticos,
+ *     la instrucción 'assert' comprueba matemáticamente el estado interno del Heap en
+ *     tiempo de ejecución (cardinalidad exacta, integridad de punteros 'siguiente',
+ *     'anterior' y 'siguienteEdad', y preservación de ciclos).
+ *
+ *  2. Detección Temprana en Seco (Fail-Fast):
+ *     Si alguna estructura no cumple con las precondiciones, invariantes o postcondiciones
+ *     esperadas, Java arroja de inmediato un 'AssertionError' con la descripción del
+ *     caso exacto, deteniendo la ejecución en seco e impidiendo falsos aprobados.
+ *
+ *  3. Activación Obligatoria en la JVM (-ea):
+ *     Por diseño en Java, los 'assert' están deshabilitados por defecto en entornos de
+ *     producción para optimizar rendimiento. Para que la máquina virtual evalúe las
+ *     aserciones durante el banco de pruebas, es INDISPENSABLE pasar la bandera '-ea'
+ *     o '-enableassertions'.
+ *
+ *  COMANDO ÚNICO DE COMPILACIÓN Y EJECUCIÓN (en una sola línea):
+ *  javac -d "Parcial_2\Listas_Enlazadas\bin" -cp "Parcial_2\Listas_Enlazadas\src" "Parcial_2\Listas_Enlazadas\src\pruebas\PruebasListas.java"; java -enableassertions -cp "Parcial_2\Listas_Enlazadas\bin" pruebas.PruebasListas
+ *
+ *  (Desde el directorio local 'Parcial_2\Listas_Enlazadas\'):
+ *  javac -d bin -cp src src/pruebas/PruebasListas.java; java -ea -cp bin pruebas.PruebasListas
+ *
+ *  Sincronizado formalmente con: docs/reporte_pruebas.md (41 Casos de Prueba):
+ *  - CP-SIM-01 a CP-SIM-09: {@link ListaSimple}
+ *  - CP-DOB-01 a CP-DOB-09: {@link ListaDoble}
+ *  - CP-CIR-01 a CP-CIR-09: {@link ListaCircular}
+ *  - CP-MUL-01 a CP-MUL-14: {@link ListaMulti}
+ * =====================================================================================
  */
 public class PruebasListas {
 
