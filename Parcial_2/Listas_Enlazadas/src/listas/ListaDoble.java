@@ -2,71 +2,59 @@ package listas;
 
 import nodos.NodoDoble;
 
-public class ListaDoble<T> {
-    private NodoDoble<T> cabeza;
-    private NodoDoble<T> cola;
-    private int tamano;
+public class ListaDoble extends ListaEnlazada {
+    private NodoDoble cola;
 
-    public boolean estaVacia() { return cabeza == null; }
-    public int tamano() { return tamano; }
+    public ListaDoble() {
+        super();
+        this.cola = null;
+    }
 
-    public void insertarInicio(T dato) {
-        NodoDoble<T> n = new NodoDoble<>(dato);
+    @Override
+    public void insertar(int dato) {
+        NodoDoble nuevo = new NodoDoble(dato);
         if (estaVacia()) {
-            cabeza = cola = n;
+            cabeza = nuevo;
+            cola = nuevo;
         } else {
-            n.siguiente = cabeza;
-            cabeza.anterior = n;
-            cabeza = n;
+            cola.setSiguiente(nuevo);
+            nuevo.setAnterior(cola);
+            cola = nuevo;
         }
         tamano++;
     }
 
-    public void insertarFinal(T dato) {
-        NodoDoble<T> n = new NodoDoble<>(dato);
-        if (estaVacia()) {
-            cabeza = cola = n;
-        } else {
-            n.anterior = cola;
-            cola.siguiente = n;
-            cola = n;
-        }
-        tamano++;
-    }
-
-    public boolean eliminar(T dato) {
-        NodoDoble<T> actual = cabeza;
+    @Override
+    public boolean eliminar(int dato) {
+        if (estaVacia()) return false;
+        
+        NodoDoble actual = (NodoDoble) cabeza;
         while (actual != null) {
-            if (actual.dato.equals(dato)) {
-                if (actual.anterior != null) actual.anterior.siguiente = actual.siguiente;
-                else cabeza = actual.siguiente;
-                if (actual.siguiente != null) actual.siguiente.anterior = actual.anterior;
-                else cola = actual.anterior;
+            if (actual.getDato() == dato) {
+                if (actual.getAnterior() != null) {
+                    actual.getAnterior().setSiguiente(actual.getSiguiente());
+                } else {
+                    cabeza = actual.getSiguiente();
+                }
+                if (actual.getSiguiente() != null) {
+                    ((NodoDoble) actual.getSiguiente()).setAnterior(actual.getAnterior());
+                } else {
+                    cola = actual.getAnterior();
+                }
                 tamano--;
                 return true;
             }
-            actual = actual.siguiente;
+            actual = actual.getSiguiente();
         }
         return false;
     }
 
-    public boolean buscar(T dato) {
-        for (NodoDoble<T> a = cabeza; a != null; a = a.siguiente)
-            if (a.dato.equals(dato)) return true;
-        return false;
-    }
-
-    public String recorrerAdelante() {
-        StringBuilder sb = new StringBuilder("null <-> ");
-        for (NodoDoble<T> a = cabeza; a != null; a = a.siguiente)
-            sb.append(a.dato).append(" <-> ");
-        return sb.append("null").toString();
-    }
-
-    public String recorrerAtras() {
-        StringBuilder sb = new StringBuilder("null <-> ");
-        for (NodoDoble<T> a = cola; a != null; a = a.anterior)
-            sb.append(a.dato).append(" <-> ");
-        return sb.append("null").toString();
+    public void mostrarReversa() {
+        if (estaVacia()) { System.out.println("[lista vacía]"); return; }
+        StringBuilder sb = new StringBuilder("null <- ");
+        for (NodoDoble a = cola; a != null; a = a.getAnterior()) {
+            sb.append(a.getDato()).append(" <-> ");
+        }
+        System.out.println(sb + " [cabeza]");
     }
 }
