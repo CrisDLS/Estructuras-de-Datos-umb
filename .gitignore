@@ -1,0 +1,68 @@
+# ==========================================
+# C++ (Compilación y Binarios)
+# ==========================================
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.ilk
+*.pdb
+*.idb
+vc*.pdb
+build/
+bin/
+out/
+CMakeCache.txt
+CMakeFiles/
+
+# ==========================================
+# Java (Bytecode, Empaquetados e IDEs)
+# ==========================================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+target/
+.gradle/
+.settings/
+.project
+.classpath
+
+# ==========================================
+# Python (Caché y Entornos Virtuales)
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+
+# ==========================================
+# Entornos de Desarrollo / IDEs
+# ==========================================
+.idea/
+*.iml
+*.iws
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# Sistema Operativo y Basura Local
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log

@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador de cola de prioridad</title>
+<style>
+:root{--bg:#fff;--fg:#1f2430;--mut:#6b7280;--card:#f3f4f8;--ac:#2f6fed;--hi:#fff3c4;--hib:#d99a00;--cm:#dbe7ff;--sw:#ffe0cc;--swb:#e0702a;--bd:#cfd3de;--box:#fff;--err:#c0392b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161c;--fg:#e6e8ee;--mut:#9aa1b2;--card:#1e222b;--ac:#6c9bff;--hi:#4a3d10;--hib:#e0a800;--cm:#23375e;--sw:#5a2f17;--swb:#ff8a4d;--bd:#3a4050;--box:#262b36;--err:#ff7b6b}}
+:root[data-theme="dark"]{--bg:#14161c;--fg:#e6e8ee;--mut:#9aa1b2;--card:#1e222b;--ac:#6c9bff;--hi:#4a3d10;--hib:#e0a800;--cm:#23375e;--sw:#5a2f17;--swb:#ff8a4d;--bd:#3a4050;--box:#262b36;--err:#ff7b6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:14px}
+h1{font-size:19px;margin:0 0 4px}h2{font-size:16px;margin:0 0 6px}
+.sub{color:var(--mut);font-size:13px;margin:0 0 12px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tab{flex:1;padding:9px 4px;border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;font-size:14px;cursor:pointer}
+.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+input,select{padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--box);color:var(--fg);font-size:14px;min-width:0}
+#d{flex:2 1 120px}#p{flex:1 1 70px}#cap{width:64px}
+button.b{padding:8px 11px;border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;font-size:14px;cursor:pointer}
+button.main{background:var(--ac);color:#fff;border-color:var(--ac)}
+#msg{min-height:18px;font-size:13px;color:var(--err)}
+.cap{font-size:13px;color:var(--mut);margin:4px 0 8px}
+.view{background:var(--card);border-radius:10px;padding:12px;margin-bottom:10px}
+.scroll{overflow-x:auto;padding-bottom:6px}
+.row{display:flex;align-items:center;gap:6px;min-width:max-content}
+.ptr{font-weight:600;color:var(--ac);white-space:nowrap}
+.node,.slot{background:var(--box);border:1.5px solid var(--bd);border-radius:8px;padding:6px 8px;font-size:13px;text-align:center;}
+
+.ad,.ix{font:11px ui-monospace,Menlo,monospace;color:var(--mut)}
+.cells span{display:block}.cells span:first-child{font-weight:600}
+.slot{width:78px;min-height:48px}
+.slot.empty{border-style:dashed;color:var(--mut)}
+.new{background:var(--hi);border-color:var(--hib)}
+.cmp{background:var(--cm);border-color:var(--ac)}
+.sw{background:var(--sw);border-color:var(--swb)}
+.nul{color:var(--mut);font:600 13px ui-monospace,Menlo,monospace}
+.ln{stroke:var(--bd);stroke-width:2}
+.nn circle{fill:var(--box);stroke:var(--ac);stroke-width:2;transition:fill .3s}
+.nn.new circle{fill:var(--hi);stroke:var(--hib)}.nn.cmp circle{fill:var(--cm)}.nn.sw circle{fill:var(--sw);stroke:var(--swb)}
+.stg{position:relative}
+.dc{position:absolute;left:0;top:0}
+.dc span,.dc .ph{position:absolute}
+.ph{width:78px;height:50px;border:1.5px dashed var(--bd);border-radius:8px;box-sizing:border-box}
+.it{position:absolute;left:0;top:0;box-sizing:border-box;transition:transform var(--dur,.55s) ease,opacity var(--dur,.55s) ease,background-color .3s,border-color .3s}
+.tn{text-align:center;background:none!important;border:0!important}
+.tn .c{width:40px;height:40px;margin:0 auto 2px;border-radius:50%;border:2px solid var(--ac);background:var(--box);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;transition:background-color .3s}
+.tn.new .c{background:var(--hi);border-color:var(--hib)}.tn.cmp .c{background:var(--cm)}.tn.sw .c{background:var(--sw);border-color:var(--swb)}
+.tp{fill:var(--fg);font:600 13px system-ui}.td{fill:var(--mut);font:11px system-ui}
+.note{font-size:12px;color:var(--mut);margin:8px 0 0}
+.leg{font-size:12px;color:var(--mut);margin:0 0 10px}
+.ent{border-left:3px solid var(--ac);padding:2px 0 2px 8px;margin:0 0 8px}
+.ent b{font-size:13px}
+.ent div{font:12px/1.4 ui-monospace,Menlo,monospace;color:var(--mut);word-break:break-word}
+.ent:first-child div:last-child{color:var(--fg);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{text-align:left;padding:5px 4px;border-bottom:1px solid var(--bd)}
+.bar{height:10px;border-radius:5px;background:var(--ac);min-width:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Simulador de cola de prioridad</h1>
+<p class="sub">Menor número = mayor prioridad. En empate sale primero el que llegó antes.</p>
+<div class="tabs">
+<button class="tab" data-m="nodos">Nodos</button>
+<button class="tab" data-m="arreglo">Arreglo</button>
+<button class="tab" data-m="heap">Heap</button>
+</div>
+<div class="ctl">
+<input id="d" placeholder="Dato (ej. Tarea A)" maxlength="20">
+<input id="p" type="number" placeholder="Prioridad" step="1">
+</div>
+<div class="ctl">
+<button class="b main" id="enc">Encolar</button>
+<button class="b" id="deq">Desencolar</button>
+<button class="b" id="ej">Ejemplo</button>
+<button class="b" id="vac">Vaciar</button>
+<span id="capw" class="ctl" style="margin:0"><label for="cap" class="ix">capacidad</label><input id="cap" type="number" min="1" max="12" value="6"></span>
+</div>
+<div class="ctl">
+<button class="b" id="au">Pausar</button>
+<button class="b" id="sg">Siguiente paso</button>
+<label for="spd" class="ix">velocidad</label>
+<select id="spd"><option value="1600">Lenta</option><option value="900" selected>Normal</option><option value="350">Rápida</option></select>
+</div>
+<div id="msg"></div>
+<div class="cap" id="cp"></div>
+<p class="leg">Colores: <b style="color:var(--ac)">azul</b> = comparando · <b style="color:var(--swb)">naranja</b> = moviendo/intercambiando · <b style="color:var(--hib)">amarillo</b> = elemento nuevo o resultado.</p>
+<div class="view" id="vw"></div>
+<div id="stt" class="note"></div>
+<div id="lg" style="margin-top:10px"></div>
+<div class="view" style="margin-top:14px">
+<h2>Comparar rendimiento</h2>
+<p class="note" style="margin:0 0 8px">Encola N elementos con prioridades al azar y luego los desencola todos. Cuenta operaciones elementales (comparaciones y movimientos) y mide el tiempo real en tu navegador.</p>
+<div class="ctl"><select id="nn"><option>100</option><option selected>1000</option><option>5000</option></select><button class="b main" id="bn">Comparar</button></div>
+<div id="br"></div>
+</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let mode='nodos',n=0,cur=[],cost=0,uid=0,EX=null;
+const mk=o=>Object.assign({log:[],st:{e:0,eo:0,d:0,dO:0}},o);
+const S={nodos:mk({l:[]}),arreglo:mk({cap:6,a:[]}),heap:mk({cap:4,a:[],ord:0})};
+const addr=()=>'0x'+(0x1A00+((++n*37)%64)*16).toString(16).toUpperCase();
+const better=(a,b)=>a.p<b.p||(a.p===b.p&&a.o<b.o);
+const CAP={
+ nodos:'Lista enlazada ordenada. Encolar: O(n) (recorre la lista). Desencolar: O(1) (quita el frente).',
+ arreglo:'Arreglo ordenado de capacidad fija. Encolar: O(n) (desplaza a la derecha). Desencolar: O(n) (desplaza a la izquierda).',
+ heap:'Montículo binario en arreglo. Se inserta al final y se "sube" comparando con el padre. Se desencola la raíz y se "baja" el último. Hijos de i: 2i+1 y 2i+2; padre: (i-1)/2. Costo: O(log n).'};
+const snap=()=>{const b=mode==='nodos'?{l:[...S.nodos.l]}:{a:[...S[mode].a],cap:S[mode].cap};b.ex=EX?{e:EX.e,at:EX.at}:null;return b;};
+function F(m,h,c){cost+=c||0;cur.push({m,h:h||{},sn:snap()});}
+
+function enqN(d,p){
+ const L=S.nodos.l,e={d,p,ad:addr(),u:++uid};let pos;
+ EX={e,at:0};
+ F(`Nodo* nuevo = new Nodo("${d}", ${p});  → reservado en ${e.ad}`,{},1);
+ if(!L.length){F('Cola vacía: frente = nuevo;',{},0);pos=0;}
+ else{
+  F(`¿${p} < ${L[0].p} (prioridad del frente)?`,{0:'cmp'},1);
+  if(p<L[0].p){F('Sí: nuevo->siguiente = frente; frente = nuevo;',{0:'cmp'},0);pos=0;}
+  else{
+   let i=0;
+   while(i+1<L.length){
+    EX.at=i+1;
+    F(`¿${L[i+1].p} <= ${p}? (prioridad del siguiente de ${L[i].ad})`,{[i+1]:'cmp'},1);
+    if(L[i+1].p<=p)i++;else break;
+   }
+   EX.at=i+1;F(`Se inserta después de ${L[i].ad}: nuevo->siguiente = actual->siguiente; actual->siguiente = nuevo;`,{[i]:'cmp'},0);pos=i+1;
+  }
+ }
+ L.splice(pos,0,e);EX=null;F('Nodo enlazado en la lista.',{[pos]:'new'},2);
+}
+function deqN(){
+ const L=S.nodos.l;
+ if(!L.length){F('La cola está vacía.',{},0);return;}
+ const e=L[0];F(`Se atiende "${e.d}" (prioridad ${e.p}): es el frente.`,{0:'new'},0);
+ L.shift();F(`frente = frente->siguiente; delete ${e.ad};  → memoria liberada`,{},2);
+}
+function enqA(d,p){
+ const s=S.arreglo,A=s.a;
+ if(A.length>=s.cap){F(`Arreglo lleno (${s.cap} de ${s.cap}): estaLlena() = true.`,{},0);return;}
+ const e={d,p,u:++uid};let i=A.length-1;A.push(null);EX={e,at:A.length-1};
+ F(`i = cantidad - 1 = ${i}; se necesita un hueco en datos[${A.length-1}]`,{},0);
+ while(i>=0){
+  F(`¿datos[${i}] (prio ${A[i].p}) > ${p}?`,{[i]:'cmp'},1);
+  if(A[i].p>p){A[i+1]=A[i];A[i]=null;EX.at=i;F(`Sí: datos[${i+1}] = datos[${i}]  (desplazar a la derecha)`,{[i+1]:'sw'},1);i--;}else break;
+ }
+ A[i+1]=e;EX=null;F(`datos[${i+1}] = ("${d}", ${p});  cantidad++`,{[i+1]:'new'},1);
+}
+function deqA(){
+ const A=S.arreglo.a;
+ if(!A.length){F('La cola está vacía.',{},0);return;}
+ const e=A[0];F(`Se atiende "${e.d}" (prioridad ${e.p}) que estaba en datos[0].`,{0:'new'},0);
+ A[0]=null;EX={e,at:0};F('El elemento sale de datos[0] y queda un hueco.',{},0);EX=null;
+ for(let i=1;i<A.length;i++){A[i-1]=A[i];A[i]=null;F(`datos[${i-1}] = datos[${i}]  (desplazar a la izquierda)`,{[i-1]:'sw'},1);}
+ A.pop();F('cantidad--',{},0);
+}
+function enqH(d,p){
+ const s=S.heap,A=s.a;
+ if(A.length>=s.cap){s.cap*=2;F(`Arreglo lleno: agrandar() → capacidad ${s.cap} (se copian los datos al arreglo nuevo)`,{},A.length);}
+ A.push({d,p,o:s.ord++,u:++uid});let i=A.length-1;
+ F(`Se coloca al final: datos[${i}] = ("${d}", ${p})`,{[i]:'new'},1);
+ while(i>0){
+  const q=(i-1)>>1;
+  F(`subir: ¿prio ${A[i].p} sale antes que la de su padre datos[${q}] (prio ${A[q].p})?`,{[i]:'cmp',[q]:'cmp'},1);
+  if(better(A[i],A[q])){[A[i],A[q]]=[A[q],A[i]];F(`Sí → intercambiar datos[${i}] con datos[${q}]`,{[i]:'sw',[q]:'sw'},1);i=q;}
+  else{F('No: el padre ya es mejor → el elemento queda en su lugar.',{[i]:'new'},0);break;}
+ }
+}
+function deqH(){
+ const s=S.heap,A=s.a;
+ if(!A.length){F('La cola está vacía.',{},0);return;}
+ F(`Se atiende la raíz: "${A[0].d}" (prioridad ${A[0].p}).`,{0:'new'},0);
+ const last=A.pop();
+ if(!A.length){F('El heap queda vacío.',{},0);return;}
+ A[0]=last;F(`El último elemento pasa a la raíz: datos[0] = ("${last.d}", ${last.p})`,{0:'new'},1);
+ let i=0;
+ while(true){
+  const l=2*i+1,r=l+1;let m=i;const h={[i]:'cmp'};
+  if(l<A.length){h[l]='cmp';if(better(A[l],A[m]))m=l;}
+  if(r<A.length){h[r]='cmp';if(better(A[r],A[m]))m=r;}
+  F(`bajar: comparar datos[${i}] con sus hijos`,h,(l<A.length)+(r<A.length));
+  if(m===i){F('Ningún hijo es mejor → el elemento queda en su lugar.',{[i]:'new'},0);break;}
+  [A[i],A[m]]=[A[m],A[i]];F(`Intercambiar datos[${i}] con datos[${m}] (el mejor hijo)`,{[i]:'sw',[m]:'sw'},1);i=m;
+ }
+}
+const OPS={nodos:[enqN,deqN],arreglo:[enqA,deqA],heap:[enqH,deqH]};
+
+class Layer{
+ constructor(h){this.h=h;this.m=new Map();}
+ place(items){
+  const seen=new Set();
+  for(const it of items){
+   seen.add(it.u);let el=this.m.get(it.u);
+   if(!el){el=document.createElement('div');el.className='it';this.h.appendChild(el);this.m.set(it.u,el);
+    el.style.opacity=0;el.style.transform=`translate(${it.x}px,${it.y-50}px)`;el.getBoundingClientRect();}
+   el.className='it '+it.cls;el.innerHTML=it.html;el.style.width=it.w+'px';el.style.height=it.hgt+'px';
+   el.style.transform=`translate(${it.x}px,${it.y}px)`;el.style.opacity=1;el._x=it.x;el._y=it.y;
+  }
+  for(const [u,el] of [...this.m]){if(!seen.has(u)){this.m.delete(u);el.style.opacity=0;el.style.transform=`translate(${el._x}px,${el._y-50}px)`;setTimeout(()=>el.remove(),800);}}
+ }
+}
+let L1=null,L2=null;
+const NX=i=>70+i*118,SX=i=>i*86;
+const setSize=(id,w,h)=>{const e=$(id);e.style.width=w+'px';e.style.height=h+'px';};
+const nh=(e,nx)=>`<div class="ad">${e.ad}</div><div class="cells"><span>${esc(e.d)}</span><span>prio ${e.p}</span><span class="ad">sig: ${nx}</span></div>`;
+const sh=e=>`<b>${esc(e.d)}</b><br>prio ${e.p}`;
+function build(){
+ const st=id=>`<div class="scroll"><div class="stg" id="${id}"><div class="dc" id="d${id}"></div></div></div>`;
+ $('vw').innerHTML=(mode==='nodos'?'<div class="ix">Cada nodo vive en una dirección distinta y apunta al siguiente</div>':'<div class="ix">datos = 0x7F20 · casillas contiguas en memoria</div>')+st('s1')+(mode==='heap'?'<div class="ix" style="margin-top:8px">Vista de árbol (misma información que el arreglo)</div>'+st('s2'):'')+'<p class="note" id="cn"></p>';
+ L1=new Layer($('s1'));L2=mode==='heap'?new Layer($('s2')):null;
+}
+function draw(sn,h){
+ const dd=+$('spd').value;$('vw').style.setProperty('--dur',(dd>1000?900:dd>500?550:220)+'ms');
+ const items=[];let dc='';
+ if(mode==='nodos'){
+  const L=sn.l;
+  dc+='<span class="ptr" style="left:0;top:92px">frente →</span>';
+  if(!L.length)dc+='<span class="nul" style="left:70px;top:92px">NULL</span>';
+  L.forEach((e,i)=>{
+   items.push({u:e.u,x:NX(i),y:70,w:100,hgt:62,cls:'node '+(h[i]||''),html:nh(e,i+1<L.length?L[i+1].ad:'NULL')});
+   dc+=`<span class="${i+1<L.length?'ptr':'nul'}" style="left:${NX(i)+104}px;top:92px">${i+1<L.length?'→':'NULL'}</span>`;
+  });
+  if(sn.ex)items.push({u:sn.ex.e.u,x:NX(sn.ex.at),y:0,w:100,hgt:62,cls:'node new',html:nh(sn.ex.e,'—')});
+  setSize('s1',Math.max(320,NX(L.length+1)+70),140);
+  $('cn').textContent='Elementos: '+L.length;
+ }else{
+  const A=sn.a;
+  for(let i=0;i<sn.cap;i++)dc+=`<span class="ix" style="left:${SX(i)+28}px;top:44px">[${i}]</span><div class="ph" style="left:${SX(i)}px;top:64px"></div>`;
+  A.forEach((e,i)=>{if(e)items.push({u:e.u,x:SX(i),y:64,w:78,hgt:50,cls:'slot '+(h[i]||''),html:sh(e)});});
+  if(sn.ex)items.push({u:sn.ex.e.u,x:SX(sn.ex.at),y:0,w:78,hgt:50,cls:'slot new',html:sh(sn.ex.e)});
+  setSize('s1',Math.max(320,sn.cap*86),122);
+  $('cn').textContent=`Elementos: ${A.filter(Boolean).length} · capacidad: ${sn.cap}`;
+ }
+ $('ds1').innerHTML=dc;L1.place(items);
+ if(mode==='heap'){
+  const A=sn.a,W=Math.max(300,$('s2').parentElement.clientWidth-4),lv=A.length?Math.floor(Math.log2(A.length))+1:0,H=Math.max(40,lv*70+30);
+  const P=i=>{const l=Math.floor(Math.log2(i+1)),j=i-(2**l-1);return[(j+.5)*W/2**l,30+l*70];};
+  let g='';const it2=[];
+  A.forEach((e,i)=>{
+   const[x,y]=P(i);
+   if(i>0){const[a,b]=P((i-1)>>1);g+=`<line class="ln" x1="${a}" y1="${b}" x2="${x}" y2="${y}"/>`;}
+   it2.push({u:e.u,x:x-32,y:y-20,w:64,hgt:62,cls:'tn '+(h[i]||''),html:`<div class="c">${e.p}</div><div class="td">${esc(e.d.slice(0,9))}</div>`});
+  });
+  setSize('s2',W,H);$('ds2').innerHTML=`<svg width="${W}" height="${H}">${g}</svg>`;L2.place(it2);
+ }
+}
+function drawLog(){
+ $('lg').innerHTML=S[mode].log.slice(0,5).map(x=>`<div class="ent"><b>${esc(x.t)}</b>${x.st.slice(-40).map(t=>`<div>${esc(t)}</div>`).join('')}</div>`).join('');
+ const t=S[mode].st,f=(a,b)=>b?(a/b).toFixed(1):'–';
+ $('stt').textContent=`Esta sesión: encolar ${t.e}× (prom. ${f(t.eo,t.e)} operaciones) · desencolar ${t.d}× (prom. ${f(t.dO,t.d)} operaciones)`;
+}
+let q=[],qi=0,tm=null,auto=true,ent=null;
+function show(f){ent.st.push(f.m);draw(f.sn,f.h);drawLog();}
+function next(){
+ clearTimeout(tm);
+ if(qi>=q.length)return;
+ show(q[qi++]);
+ if(qi<q.length&&auto)tm=setTimeout(next,+$('spd').value);
+}
+function finish(){clearTimeout(tm);while(qi<q.length)show(q[qi++]);q=[];qi=0;}
+function render(){
+ finish();
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+ $('capw').style.display=mode==='arreglo'?'flex':'none';
+ $('cp').textContent=CAP[mode];
+ build();draw(snap(),{});drawLog();
+}
+function run(kind,d,p){
+ finish();cur=[];cost=0;EX=null;
+ const s=S[mode];OPS[mode][kind==='enc'?0:1](d,p);
+ if(cost>0){if(kind==='enc'){s.st.e++;s.st.eo+=cost;}else{s.st.d++;s.st.dO+=cost;}}
+ ent={t:(kind==='enc'?`Encolar ("${d}", prioridad ${p})`:'Desencolar')+` · ${cost} operaciones`,st:[]};
+ s.log.unshift(ent);s.log.length=Math.min(s.log.length,12);
+ q=cur;qi=0;next();
+}
+$('enc').onclick=()=>{
+ const p=parseInt($('p').value,10);
+ if(Number.isNaN(p)){$('msg').textContent='Escribe una prioridad entera.';return;}
+ $('msg').textContent='';
+ run('enc',$('d').value.trim()||'Dato'+(n+1),p);$('d').value='';
+};
+$('deq').onclick=()=>{$('msg').textContent='';run('deq');};
+$('vac').onclick=()=>{
+ finish();const s=S[mode];
+ if(mode==='nodos')s.l=[];else s.a=[];
+ s.log.unshift({t:'Vaciar cola',st:['cantidad = 0']});$('msg').textContent='';render();
+};
+$('ej').onclick=()=>{
+ $('msg').textContent='';finish();
+ const fr=[];let t=0;
+ [['Tarea A',3],['Tarea B',1],['Tarea C',2],['Tarea D',1],['Tarea E',5]].forEach(x=>{cur=[];cost=0;EX=null;OPS[mode][0](x[0],x[1]);const s=S[mode];if(cost>0){s.st.e++;s.st.eo+=cost;}t+=cost;fr.push(...cur);});
+ ent={t:`Ejemplo: 5 elementos encolados · ${t} operaciones`,st:[]};
+ S[mode].log.unshift(ent);q=fr;qi=0;next();
+};
+$('cap').onchange=()=>{
+ const s=S.arreglo,v=Math.max(1,Math.min(12,parseInt($('cap').value,10)||6));
+ if(v<s.a.length){$('msg').textContent='La capacidad no puede ser menor que los elementos actuales.';$('cap').value=s.cap;return;}
+ $('msg').textContent='';s.cap=v;$('cap').value=v;render();
+};
+$('au').onclick=()=>{auto=!auto;$('au').textContent=auto?'Pausar':'Reanudar';if(auto)next();else clearTimeout(tm);};
+$('sg').onclick=()=>{clearTimeout(tm);next();};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{finish();mode=b.dataset.m;$('msg').textContent='';render();});
+['d','p'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter')$('enc').click();}));
+
+function bench(N){
+ const P=Array.from({length:N},()=>1+Math.floor(Math.random()*N)),R=[];
+ let t=performance.now(),eo=0,dO=0,h=null;
+ for(const p of P){
+  eo++;const nd={p,n:null};eo++;
+  if(!h||p<h.p){nd.n=h;h=nd;eo+=2;}
+  else{let a=h;while(a.n){eo++;if(a.n.p<=p)a=a.n;else break;}nd.n=a.n;a.n=nd;eo+=2;}
+ }
+ while(h){h=h.n;dO+=2;}
+ R.push({nm:'Nodos',cx:'O(n) / O(1)',eo,dO,ms:performance.now()-t});
+ t=performance.now();eo=0;dO=0;
+ const A=new Array(N);let len=0;
+ for(const p of P){
+  let i=len-1;
+  while(i>=0){eo++;if(A[i]>p){A[i+1]=A[i];eo++;i--;}else break;}
+  A[i+1]=p;eo++;len++;
+ }
+ while(len>0){for(let i=1;i<len;i++){A[i-1]=A[i];dO++;}len--;}
+ R.push({nm:'Arreglo',cx:'O(n) / O(n)',eo,dO,ms:performance.now()-t});
+ t=performance.now();eo=0;dO=0;
+ const H=[];
+ for(const p of P){
+  H.push(p);eo++;let i=H.length-1;
+  while(i>0){const q=(i-1)>>1;eo++;if(H[i]<H[q]){const x=H[i];H[i]=H[q];H[q]=x;eo++;i=q;}else break;}
+ }
+ while(H.length){
+  const last=H.pop();
+  if(H.length){
+   H[0]=last;dO++;let i=0;
+   while(true){
+    const l=2*i+1,r=l+1;let m=i;
+    if(l<H.length){dO++;if(H[l]<H[m])m=l;}
+    if(r<H.length){dO++;if(H[r]<H[m])m=r;}
+    if(m===i)break;
+    const x=H[i];H[i]=H[m];H[m]=x;dO++;i=m;
+   }
+  }
+ }
+ R.push({nm:'Heap',cx:'O(log n) / O(log n)',eo,dO,ms:performance.now()-t});
+ return R;
+}
+$('bn').onclick=()=>{
+ const N=+$('nn').value,R=bench(N),mx=Math.max(...R.map(r=>r.eo+r.dO));
+ $('br').innerHTML=`<table><tr><th>Implementación</th><th>Operaciones encolar</th><th>Operaciones desencolar</th><th>Tiempo</th></tr>`+
+  R.map(r=>`<tr><td><b>${r.nm}</b><br><span class="ix">encolar/desencolar ${r.cx}</span></td><td>${r.eo.toLocaleString()}</td><td>${r.dO.toLocaleString()}</td><td>${r.ms.toFixed(1)} ms</td></tr><tr><td colspan="4"><div class="bar" style="width:${Math.max(1,(r.eo+r.dO)/mx*100)}%"></div></td></tr>`).join('')+
+  `</table><p class="note">Con N = ${N}. La barra muestra las operaciones totales relativas a la mayor. El tiempo varía según tu dispositivo.</p>`;
+};
+render();
+</script>
+</body>
+</html>
