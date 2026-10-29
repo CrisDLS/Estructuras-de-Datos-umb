@@ -109,12 +109,8 @@ public class NodoMulti extends Nodo {
         this.siguienteEdad = siguienteEdad;
     }
 
-    /**
-     * Retorna el siguiente nodo en el criterio alfabético tipado directamente como {@link NodoMulti}.
-     *
-     * @return El siguiente {@link NodoMulti} en la cadena alfabética, o {@code null} si es el último.
-     */
-    public NodoMulti getSiguienteMulti() {
+    @Override
+    public NodoMulti getSiguiente() {
         return (NodoMulti) super.getSiguiente();
     }
 

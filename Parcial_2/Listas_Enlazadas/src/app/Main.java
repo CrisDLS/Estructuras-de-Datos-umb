@@ -5,8 +5,6 @@ import listas.*;
 
 /**
  * Menú interactivo y demostración de polimorfismo para el proyecto de Listas Enlazadas.
- * 
- * @author Fátima (Base y Aplicación) / Integración: Cristian
  */
 public class Main {
 
@@ -29,13 +27,12 @@ public class Main {
         System.out.println("       DEMOSTRACIÓN DE POLIMORFISMO DINÁMICO      ");
         System.out.println("==================================================");
 
-        // Se incluyen las listas completadas del equipo.
-        // ListaDoble y ListaCircular permanecen comentadas temporalmente hasta la entrega de Karen.
+        // Se incluyen las cuatro variantes de listas enlazadas del proyecto.
         ListaEnlazada[] listas = {
             new ListaSimple(),
-            new ListaMulti()
-            // new ListaDoble(),
-            // new ListaCircular()
+            new ListaMulti(),
+            new ListaDoble(),
+            new ListaCircular()
         };
 
         System.out.println("\n--- 1. Llenado polimórfico con datos: {30, 10, 50, 20, 40} ---");
@@ -52,14 +49,12 @@ public class Main {
             l.mostrar();
         }
 
-        /* 
-        // Bloque reservado para ejecución bidireccional cuando Karen entregue ListaDoble:
+        // Ejecución bidireccional en ListaDoble:
         if (listas.length > 2 && listas[2] instanceof ListaDoble) {
             System.out.print("\nListaDoble inverso: ");
             ((ListaDoble) listas[2]).mostrarInverso();
         }
-        */
-
+        
         System.out.println("\n--- Demostración de la Multilista con criterios de Nombre y Edad ---");
         ListaMulti miMulti = new ListaMulti();
         llenar(miMulti); // Llenado con nombres y edades
@@ -90,9 +85,12 @@ public class Main {
                 System.out.println("\n-> Has seleccionado: Multilista de Personas (Doble Criterio: Alfabético y Edad).");
                 break;
             case 3:
+                lista = new ListaDoble();
+                System.out.println("\n-> Has seleccionado: Lista Doblemente Enlazada.");
+                break;
             case 4:
-                System.out.println("\n[!] Módulo en desarrollo por Integrante Karen. Asignando Lista Simple temporalmente.");
-                lista = new ListaSimple();
+                lista = new ListaCircular();
+                System.out.println("\n-> Has seleccionado: Lista Circular.");
                 break;
             default:
                 lista = new ListaSimple();
@@ -124,7 +122,7 @@ public class Main {
                         System.out.print("Ingresa un valor entero: ");
                         int v = in.nextInt();
                         lista.insertar(v);
-                        System.out.println("-> Elemento insertado en la lista simple.");
+                        System.out.println("-> Elemento insertado en la lista.");
                     }
                     break;
 
@@ -168,6 +166,10 @@ public class Main {
                 case 4:
                     System.out.println("\nEstado actual de la estructura:");
                     lista.mostrar();
+                    if (lista instanceof ListaDoble) {
+                        System.out.println("Recorrido inverso (cola a cabeza):");
+                        ((ListaDoble) lista).mostrarInverso();
+                    }
                     break;
 
                 case 0:
@@ -200,16 +202,21 @@ public class Main {
             }
             op = in.nextInt();
 
-            if (op == 1) {
-                demostracion();
-            } else if (op == 2) {
-                interactivo(in);
-            } else if (op == 0) {
-                System.out.println("\n¡Hasta luego! Proyecto Listas Enlazadas finalizado.");
-            } else {
-                System.out.println("Opción no válida. Intenta de nuevo.");
+            switch (op) {
+                case 1:
+                    demostracion();
+                    break;
+                case 2:
+                    interactivo(in);
+                    break;
+                case 0:
+                    System.out.println("¡Hasta luego! Proyecto Listas Enlazadas finalizado.");
+                    break;
+                default:
+                    System.out.println("Opción inválida.");
             }
         } while (op != 0);
+
         in.close();
     }
 }

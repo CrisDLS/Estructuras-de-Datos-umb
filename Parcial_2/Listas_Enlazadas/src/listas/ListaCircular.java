@@ -2,6 +2,11 @@ package listas;
 
 import nodos.Nodo;
 
+/**
+ * Lista circularmente enlazada simple.
+ * Hereda de ListaEnlazada y mantiene el último nodo apuntando
+ * de regreso a la cabeza.
+ */
 public class ListaCircular extends ListaEnlazada {
 
     @Override
@@ -9,7 +14,7 @@ public class ListaCircular extends ListaEnlazada {
         Nodo nuevo = new Nodo(dato);
         if (estaVacia()) {
             cabeza = nuevo;
-            nuevo.setSiguiente(cabeza); // apunta a sí misma
+            nuevo.setSiguiente(cabeza);
         } else {
             Nodo actual = cabeza;
             while (actual.getSiguiente() != cabeza) {
@@ -17,6 +22,23 @@ public class ListaCircular extends ListaEnlazada {
             }
             actual.setSiguiente(nuevo);
             nuevo.setSiguiente(cabeza);
+        }
+        tamano++;
+    }
+
+    public void insertarAlInicio(int dato) {
+        Nodo nuevo = new Nodo(dato);
+        if (estaVacia()) {
+            cabeza = nuevo;
+            nuevo.setSiguiente(cabeza);
+        } else {
+            Nodo ultimo = cabeza;
+            while (ultimo.getSiguiente() != cabeza) {
+                ultimo = ultimo.getSiguiente();
+            }
+            nuevo.setSiguiente(cabeza);
+            ultimo.setSiguiente(nuevo);
+            cabeza = nuevo;
         }
         tamano++;
     }
@@ -54,6 +76,39 @@ public class ListaCircular extends ListaEnlazada {
         } while (actual != cabeza);
 
         return false;
+    }
+
+    public boolean eliminarAlInicio() {
+        if (estaVacia()) return false;
+        if (tamano == 1) {
+            cabeza = null;
+        } else {
+            Nodo ultimo = cabeza;
+            while (ultimo.getSiguiente() != cabeza) {
+                ultimo = ultimo.getSiguiente();
+            }
+            cabeza = cabeza.getSiguiente();
+            ultimo.setSiguiente(cabeza);
+        }
+        tamano--;
+        return true;
+    }
+
+    public boolean eliminarAlFinal() {
+        if (estaVacia()) return false;
+        if (tamano == 1) {
+            cabeza = null;
+        } else {
+            Nodo anterior = null;
+            Nodo actual = cabeza;
+            while (actual.getSiguiente() != cabeza) {
+                anterior = actual;
+                actual = actual.getSiguiente();
+            }
+            anterior.setSiguiente(cabeza);
+        }
+        tamano--;
+        return true;
     }
 
     @Override

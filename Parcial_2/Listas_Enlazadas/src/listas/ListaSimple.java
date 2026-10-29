@@ -44,4 +44,27 @@ public class ListaSimple extends ListaEnlazada {
         }
         return false;
     }
+
+    public boolean eliminarAlInicio() {
+        if (estaVacia()) return false;
+        cabeza = cabeza.getSiguiente();
+        tamano--;
+        return true;
+    }
+
+    public boolean eliminarAlFinal() {
+        if (estaVacia()) return false;
+        if (cabeza.getSiguiente() == null) {
+            cabeza = null;
+            tamano = 0;
+            return true;
+        }
+        Nodo a = cabeza;
+        while (a.getSiguiente().getSiguiente() != null) {
+            a = a.getSiguiente();
+        }
+        a.setSiguiente(null);
+        tamano--;
+        return true;
+    }
 }

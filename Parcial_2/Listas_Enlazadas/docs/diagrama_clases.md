@@ -1,6 +1,6 @@
-# Diagrama de Clases - Listas Enlazadas
+# Diagrama de Clases — Listas Enlazadas
 
-Diagrama de clases UML del módulo `src` para las listas enlazadas y sus respectivos nodos, incorporando la modelación de personas (Nombre + Edad) en la Multilista.
+Diagrama de clases UML del módulo `src` para las listas enlazadas y sus respectivos nodos, incorporando la modelación completa y estandarizada de las cuatro variantes: `ListaSimple`, `ListaDoble`, `ListaCircular` y `ListaMulti`.
 
 ```mermaid
 classDiagram
@@ -18,6 +18,10 @@ classDiagram
         }
         class NodoDoble {
             -NodoDoble anterior
+            +NodoDoble(int dato)
+            +getAnterior() NodoDoble
+            +setAnterior(NodoDoble) void
+            +getSiguiente() NodoDoble
         }
         class NodoMulti {
             -String nombre
@@ -31,7 +35,7 @@ classDiagram
             +setEdad(int) void
             +getSiguienteEdad() NodoMulti
             +setSiguienteEdad(NodoMulti) void
-            +getSiguienteMulti() NodoMulti
+            +getSiguiente() NodoMulti
             +toString() String
         }
     }
@@ -53,10 +57,29 @@ classDiagram
             +insertar(int dato) void
             +insertarAlInicio(int dato) void
             +eliminar(int dato) boolean
+            +eliminarAlInicio() boolean
+            +eliminarAlFinal() boolean
         }
         class ListaDoble {
+            -NodoDoble cola
+            +ListaDoble()
+            +insertar(int dato) void
+            +insertarAlInicio(int dato) void
+            +eliminar(int dato) boolean
+            +eliminarAlInicio() boolean
+            +eliminarAlFinal() boolean
+            +mostrarInverso() void
+            +limpiar() void
+            +getCola() NodoDoble
         }
         class ListaCircular {
+            +insertar(int dato) void
+            +insertarAlInicio(int dato) void
+            +eliminar(int dato) boolean
+            +eliminarAlInicio() boolean
+            +eliminarAlFinal() boolean
+            +mostrar() void
+            +buscar(int dato) boolean
         }
         class ListaMulti {
             #NodoMulti cabezaEdad

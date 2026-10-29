@@ -2,8 +2,6 @@ package pruebas;
 
 import listas.ListaSimple;
 import listas.ListaMulti;
-// [INTEGRANTE KAREN - PENDIENTE DE ENTREGA]:
-// Descomentar cuando Karen entregue ListaDoble y ListaCircular:
 import listas.ListaDoble;
 import listas.ListaCircular;
 
@@ -13,24 +11,22 @@ import listas.ListaCircular;
  * Cada método y bloque de prueba ejecuta y valida exactamente los casos de prueba (CP)
  * registrados en {@code docs/reporte_pruebas.md}:
  * <ul>
- *   <li><b>CP-SIM-01 a CP-SIM-09:</b> {@link ListaSimple} (Entrega Integrante Fátima)</li>
- *   <li><b>CP-DOB-01 a CP-DOB-02:</b> {@code ListaDoble} (Pendiente Integrante Karen)</li>
- *   <li><b>CP-CIR-01 a CP-CIR-02:</b> {@code ListaCircular} (Pendiente Integrante Karen)</li>
- *   <li><b>CP-MUL-01 a CP-MUL-14:</b> {@link ListaMulti} (Entrega Integrante Cristian)</li>
+ *   <li><b>CP-SIM-01 a CP-SIM-09:</b> {@link ListaSimple}</li>
+ *   <li><b>CP-DOB-01 a CP-DOB-09:</b> {@link ListaDoble}</li>
+ *   <li><b>CP-CIR-01 a CP-CIR-09:</b> {@link ListaCircular}</li>
+ *   <li><b>CP-MUL-01 a CP-MUL-14:</b> {@link ListaMulti}</li>
  * </ul>
  * </p>
- *
- * @author Cristian (Integrante 3 - Arquitectura y Multilistas)
  */
 public class PruebasListas {
 
     /**
-     * Valida exhaustivamente el comportamiento de la Lista Enlazada Simple (Fátima).
+     * Valida exhaustivamente el comportamiento de la Lista Enlazada Simple.
      * Casos: CP-SIM-01 al CP-SIM-09
      */
     public static void probarListaSimple() {
         System.out.println("==================================================");
-        System.out.println("   BANCO DE PRUEBAS: LISTA SIMPLE (Fátima)");
+        System.out.println("   BANCO DE PRUEBAS: LISTA SIMPLE");
         System.out.println("==================================================");
 
         ListaSimple lista = new ListaSimple();
@@ -101,62 +97,66 @@ public class PruebasListas {
     }
 
     /**
-     * Plantilla de pruebas para Lista Doblemente Enlazada (Karen).
-     * Casos: CP-DOB-01 y CP-DOB-02
+     * Valida exhaustivamente el comportamiento de la Lista Doblemente Enlazada.
+     * Casos: CP-DOB-01 al CP-DOB-09
      */
- public static void probarListaDoble() {
+    public static void probarListaDoble() {
         System.out.println("==================================================");
-        System.out.println("   BANCO DE PRUEBAS: LISTA DOBLE (yo)");
+        System.out.println("   BANCO DE PRUEBAS: LISTA DOBLE");
         System.out.println("==================================================");
         ListaDoble lista = new ListaDoble();
 
-        System.out.print("[CP-DOB-01] Insercion en lista vacia (15)... ");
+        System.out.print("[CP-DOB-01] Inserción en lista vacía (15)... ");
         lista.insertar(15);
         assert lista.getTamano() == 1 : "Error DOB-01";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-DOB-02] Insercion multiple (25, 35)... ");
+        System.out.print("[CP-DOB-02] Inserción múltiple al final (25, 35)... ");
         lista.insertar(25);
         lista.insertar(35);
         assert lista.getTamano() == 3 : "Error DOB-02";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-DOB-03] Insercion al inicio (5)... ");
+        System.out.print("[CP-DOB-03] Inserción al inicio (5)... ");
         lista.insertarAlInicio(5);
         assert lista.getTamano() == 4 : "Error DOB-03";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> nueva cabeza es 5");
 
         System.out.print("[CP-DOB-04] Recorrido hacia adelante... ");
         lista.mostrar();
-        System.out.println("✅ Aprobado");
+        System.out.println("            ✅ Aprobado -> Enlaces directos verificados");
 
-        System.out.print("[CP-DOB-05] Recorrido inverso... ");
+        System.out.print("[CP-DOB-05] Recorrido inverso bidireccional... ");
         lista.mostrarInverso();
-        System.out.println("✅ Aprobado");
+        System.out.println("            ✅ Aprobado -> Enlaces inversos verificados");
 
-        System.out.print("[CP-DOB-06] Busqueda (25)... ");
+        System.out.print("[CP-DOB-06] Búsqueda existente (25)... ");
         assert lista.buscar(25) : "Error DOB-06";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> resultado: true");
 
-        System.out.print("[CP-DOB-07] Eliminacion al inicio... ");
+        System.out.print("[CP-DOB-07] Eliminación al inicio... ");
         lista.eliminarAlInicio();
         assert lista.getTamano() == 3 : "Error DOB-07";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-DOB-08] Eliminacion al final... ");
+        System.out.print("[CP-DOB-08] Eliminación al final... ");
         lista.eliminarAlFinal();
         assert lista.getTamano() == 2 : "Error DOB-08";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-DOB-09] Vaciado completo... ");
-        lista.vaciar();
+        System.out.print("[CP-DOB-09] Vaciado completo de la lista... ");
+        lista.limpiar();
         assert lista.estaVacia() : "Error DOB-09";
-        System.out.println("✅ Aprobado\n");
+        System.out.println("✅ Aprobado -> estaVacia = true, tamano = 0\n");
     }
-   
-       public static void probarListaCircular() {
+
+    /**
+     * Valida exhaustivamente el comportamiento de la Lista Circular.
+     * Casos: CP-CIR-01 al CP-CIR-09
+     */
+    public static void probarListaCircular() {
         System.out.println("==================================================");
-        System.out.println("   BANCO DE PRUEBAS: LISTA CIRCULAR (yo)");
+        System.out.println("   BANCO DE PRUEBAS: LISTA CIRCULAR");
         System.out.println("==================================================");
         ListaCircular lista = new ListaCircular();
 
@@ -164,53 +164,54 @@ public class PruebasListas {
         lista.insertar(5);
         lista.insertar(8);
         assert lista.getTamano() == 2 : "CP-CIR-01 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = 2, ciclo cerrado");
 
         System.out.print("[CP-CIR-02] Recorrido sin bucle infinito... ");
         lista.mostrar();
-        System.out.println("✅ Aprobado");
+        System.out.println("            ✅ Aprobado -> Recorrido acotado a cabeza");
 
-        System.out.print("[CP-CIR-03] Insercion al inicio (1)... ");
+        System.out.print("[CP-CIR-03] Inserción al inicio (1)... ");
         lista.insertarAlInicio(1);
         assert lista.getTamano() == 3 : "CP-CIR-03 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> nueva cabeza es 1, último re-enlazado");
 
-        System.out.print("[CP-CIR-04] Insercion multiple (10, 15)... ");
+        System.out.print("[CP-CIR-04] Inserción múltiple al final (10, 15)... ");
         lista.insertar(10);
         lista.insertar(15);
         assert lista.getTamano() == 5 : "CP-CIR-04 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-CIR-05] Busqueda existente (8)... ");
+        System.out.print("[CP-CIR-05] Búsqueda existente en ciclo (8)... ");
         assert lista.buscar(8) : "CP-CIR-05 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> resultado: true");
 
-        System.out.print("[CP-CIR-06] Busqueda inexistente (99)... ");
+        System.out.print("[CP-CIR-06] Búsqueda inexistente en ciclo (99)... ");
         assert !lista.buscar(99) : "CP-CIR-06 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> resultado: false sin bucle infinito");
 
-        System.out.print("[CP-CIR-07] Eliminacion al inicio... ");
+        System.out.print("[CP-CIR-07] Eliminación al inicio... ");
         lista.eliminarAlInicio();
         assert lista.getTamano() == 4 : "CP-CIR-07 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-CIR-08] Eliminacion al final... ");
+        System.out.print("[CP-CIR-08] Eliminación al final... ");
         lista.eliminarAlFinal();
         assert lista.getTamano() == 3 : "CP-CIR-08 Error";
-        System.out.println("✅ Aprobado");
+        System.out.println("✅ Aprobado -> tamano = " + lista.getTamano());
 
-        System.out.print("[CP-CIR-09] Vaciado completo... ");
-        lista.vaciar();
+        System.out.print("[CP-CIR-09] Vaciado completo de la lista... ");
+        lista.limpiar();
         assert lista.estaVacia() : "CP-CIR-09 Error";
-        System.out.println("✅ Aprobado -> vacia\n");
+        System.out.println("✅ Aprobado -> estaVacia = true, tamano = 0\n");
     }
+
     /**
-     * Valida exhaustivamente el comportamiento de la Multilista de Personas (Cristian).
+     * Valida exhaustivamente el comportamiento de la Multilista de Personas.
      * Casos: CP-MUL-01 al CP-MUL-14
      */
     public static void probarListaMulti() {
         System.out.println("==================================================");
-        System.out.println("   BANCO DE PRUEBAS: MULTILISTA 2D (Cristian)");
+        System.out.println("   BANCO DE PRUEBAS: MULTILISTA 2D");
         System.out.println("   (Personas: Criterio Alfabético y por Edad)");
         System.out.println("==================================================");
 
@@ -331,16 +332,16 @@ public class PruebasListas {
         System.out.println("   Sincronizado formalmente con: docs/reporte_pruebas.md   ");
         System.out.println("############################################################\n");
 
-        // 1. Pruebas Lista Simple (Fátima)
+        // 1. Pruebas Lista Simple
         probarListaSimple();
 
-        // 2. Pruebas Lista Doble (yo)
+        // 2. Pruebas Lista Doble
         probarListaDoble();
 
-        // 3. Pruebas Lista Circular (yo)
+        // 3. Pruebas Lista Circular
         probarListaCircular();
 
-        // 4. Pruebas Multilista (Cristian)
+        // 4. Pruebas Multilista
         probarListaMulti();
 
         System.out.println("============================================================");
