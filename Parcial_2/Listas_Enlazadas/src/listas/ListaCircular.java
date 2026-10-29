@@ -1,73 +1,82 @@
 package listas;
 
-import nodos.NodoDoble;
+import nodos.Nodo;
 
-public class ListaCircular<T> {
-    private NodoDoble<T> cabeza;
-    private int tamano;
+public class ListaCircular extends ListaEnlazada {
 
-    public boolean estaVacia() { return cabeza == null; }
-    public int tamano() { return tamano; }
-
-    public void insertarFinal(T dato) {
-        NodoDoble<T> n = new NodoDoble<>(dato);
+    @Override
+    public void insertar(int dato) {
+        Nodo nuevo = new Nodo(dato);
         if (estaVacia()) {
-            n.siguiente = n;
-            n.anterior = n;
-            cabeza = n;
+            cabeza = nuevo;
+            nuevo.setSiguiente(cabeza); // apunta a sí misma
         } else {
-            NodoDoble<T> ultimo = cabeza.anterior;
-            n.siguiente = cabeza;
-            n.anterior = ultimo;
-            ultimo.siguiente = n;
-            cabeza.anterior = n;
+            Nodo actual = cabeza;
+            while (actual.getSiguiente() != cabeza) {
+                actual = actual.getSiguiente();
+            }
+            actual.setSiguiente(nuevo);
+            nuevo.setSiguiente(cabeza);
         }
         tamano++;
     }
 
-    public void insertarInicio(T dato) {
-        insertarFinal(dato);
-        cabeza = cabeza.anterior;
-    }
-
-    public boolean eliminar(T dato) {
+    @Override
+    public boolean eliminar(int dato) {
         if (estaVacia()) return false;
-        NodoDoble<T> actual = cabeza;
+
+        Nodo actual = cabeza;
+        Nodo anterior = null;
+
+        // Buscar el último para mantener referencia circular
+        Nodo ultimo = cabeza;
+        while (ultimo.getSiguiente() != cabeza) {
+            ultimo = ultimo.getSiguiente();
+        }
+
         do {
-            if (actual.dato.equals(dato)) {
-                if (tamano == 1) {
-                    cabeza = null;
+            if (actual.getDato() == dato) {
+                if (actual == cabeza) {
+                    if (tamano == 1) {
+                        cabeza = null;
+                    } else {
+                        cabeza = cabeza.getSiguiente();
+                        ultimo.setSiguiente(cabeza);
+                    }
                 } else {
-                    actual.anterior.siguiente = actual.siguiente;
-                    actual.siguiente.anterior = actual.anterior;
-                    if (actual == cabeza) cabeza = actual.siguiente;
+                    anterior.setSiguiente(actual.getSiguiente());
                 }
                 tamano--;
                 return true;
             }
-            actual = actual.siguiente;
+            anterior = actual;
+            actual = actual.getSiguiente();
+        } while (actual != cabeza);
+
+        return false;
+    }
+
+    @Override
+    public void mostrar() {
+        if (estaVacia()) { System.out.println("[lista vacía]"); return; }
+        StringBuilder sb = new StringBuilder();
+        Nodo actual = cabeza;
+        do {
+            sb.append(actual.getDato()).append(" -> ");
+            actual = actual.getSiguiente();
+        } while (actual != cabeza);
+        sb.append("(cabeza)");
+        System.out.println(sb);
+    }
+
+    @Override
+    public boolean buscar(int dato) {
+        if (estaVacia()) return false;
+        Nodo actual = cabeza;
+        do {
+            if (actual.getDato() == dato) return true;
+            actual = actual.getSiguiente();
         } while (actual != cabeza);
         return false;
-    }
-
-    public boolean buscar(T dato) {
-        if (estaVacia()) return false;
-        NodoDoble<T> a = cabeza;
-        do {
-            if (a.dato.equals(dato)) return true;
-            a = a.siguiente;
-        } while (a != cabeza);
-        return false;
-    }
-
-    public String recorrer() {
-        if (estaVacia()) return "(vacía)";
-        StringBuilder sb = new StringBuilder();
-        NodoDoble<T> a = cabeza;
-        do {
-            sb.append(a.dato).append(" -> ");
-            a = a.siguiente;
-        } while (a != cabeza);
-        return sb.append("(vuelve a ").append(cabeza.dato).append(")").toString();
     }
 }
