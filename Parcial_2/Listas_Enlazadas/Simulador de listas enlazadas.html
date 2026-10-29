@@ -3,707 +3,415 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Simulador Interactivo de Listas Enlazadas</title>
+<title>Simulador de Listas Enlazadas</title>
 <style>
-:root{
-  --bg:#ffffff;--fg:#1f2430;--mut:#6b7280;--card:#f4f5f8;--ac:#2f6fed;--ac-rgb:47,111,237;
-  --gr:#16a34a;--gr-rgb:22,163,74;--hi:#fff3c4;--hib:#d99a00;--cm:#dbe7ff;--sw:#ffe0cc;--swb:#e0702a;
-  --bd:#cfd3de;--box:#ffffff;--err:#dc2626;--dur:600ms;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#12141a;--fg:#e6e8ee;--mut:#9aa1b2;--card:#1a1e27;--ac:#6c9bff;--ac-rgb:108,155,255;
-    --gr:#34d399;--gr-rgb:52,211,153;--hi:#4a3d10;--hib:#e0a800;--cm:#1e3258;--sw:#542913;--swb:#ff8a4d;
-    --bd:#2e3545;--box:#222733;--err:#f87171;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#12141a;--fg:#e6e8ee;--mut:#9aa1b2;--card:#1a1e27;--ac:#6c9bff;--ac-rgb:108,155,255;
-  --gr:#34d399;--gr-rgb:52,211,153;--hi:#4a3d10;--hib:#e0a800;--cm:#1e3258;--sw:#542913;--swb:#ff8a4d;
-  --bd:#2e3545;--box:#222733;--err:#f87171;
-}
+/* Colores como variables: claro por defecto, oscuro por preferencia del sistema o por el botón de tema */
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff;--fg:#1f2430;--mut:#6b7280;--card:#f4f5f8;--ac:#2f6fed;--gr:#16a34a;--hi:#fff3c4;--hib:#d99a00;--cm:#dbe7ff;--sw:#ffe0cc;--swb:#e0702a;--bd:#cfd3de;--box:#fff;--err:#dc2626}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12141a;--fg:#e6e8ee;--mut:#9aa1b2;--card:#1a1e27;--ac:#6c9bff;--gr:#34d399;--hi:#4a3d10;--hib:#e0a800;--cm:#1e3258;--sw:#542913;--swb:#ff8a4d;--bd:#2e3545;--box:#222733;--err:#f87171}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#12141a;--fg:#e6e8ee;--mut:#9aa1b2;--card:#1a1e27;--ac:#6c9bff;--gr:#34d399;--hi:#4a3d10;--hib:#e0a800;--cm:#1e3258;--sw:#542913;--swb:#ff8a4d;--bd:#2e3545;--box:#222733;--err:#f87171}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:960px;margin:0 auto;padding:14px}
-h1{font-size:20px;margin:0 0 4px;display:flex;align-items:center;justify-content:space-between}
+.wrap{max-width:980px;margin:0 auto;padding:14px}
+h1{font-size:20px;margin:0 0 2px;display:flex;justify-content:space-between;align-items:center}
 .sub{color:var(--mut);font-size:13px;margin:0 0 12px}
-.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
-.tab{flex:1;min-width:130px;padding:9px 6px;border:1.5px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.tab:hover{border-color:var(--ac)}
-.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-
+.tabs{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto}
+.tab{flex:1;min-width:120px;padding:9px 6px;border:1.5px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;font-weight:600;cursor:pointer}
+.tab.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.info{background:var(--card);border-left:4px solid var(--ac);padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:10px}
 .ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.ctl[hidden]{display:none}
 input,select{padding:7px 10px;border:1.5px solid var(--bd);border-radius:8px;background:var(--box);color:var(--fg);font-size:13px;min-width:0}
-input:focus,select:focus{outline:none;border-color:var(--ac)}
-#inDato{flex:1 1 120px}
-#inNom{flex:1 1 130px}
-#inEdad{flex:1 1 90px}
-button.b{padding:7px 12px;border:1.5px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background-color .15s,border-color .15s}
-button.b:hover{background:var(--bd)}
-button.main{background:var(--ac);color:#fff;border-color:var(--ac)}
-button.main:hover{opacity:.9}
-button.gr{background:var(--gr);color:#fff;border-color:var(--gr)}
-
-.view{background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:12px;min-height:180px}
-.scroll{overflow-x:auto;padding-bottom:10px;position:relative}
-.stg{position:relative;min-height:120px}
-
-/* Nodos */
-.node{
-  position:absolute;box-sizing:border-box;background:var(--box);border:1.5px solid var(--bd);
-  border-radius:10px;padding:8px 10px;font-size:12px;text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.06);
-  transition:transform var(--dur) cubic-bezier(.2,.8,.2,1),opacity var(--dur),background-color .3s,border-color .3s;
-}
-.node .ad{font:10px ui-monospace,Menlo,monospace;color:var(--mut);margin-bottom:2px}
-.node .val{font-weight:700;font-size:14px;color:var(--fg);margin-bottom:3px}
-.node .ptrs{font:11px ui-monospace,Menlo,monospace;color:var(--mut);border-top:1px dashed var(--bd);padding-top:4px}
-.node .ptrs span{display:block}
-.node.new{background:var(--hi);border-color:var(--hib)}
+input{flex:1 1 110px}
+.b{padding:7px 12px;border:1.5px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.b:hover{border-color:var(--ac)}
+.main{background:var(--ac);border-color:var(--ac);color:#fff}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.msg{color:var(--err);min-height:18px;font-size:13px}
+.leg{font-size:12px;color:var(--mut);margin:2px 0 8px}
+.view{background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px}
+.scroll{overflow-x:auto}
+.stg{position:relative}
+.stg svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.pa,.pg,.pm{fill:none;stroke-width:2}
+.pa{stroke:var(--ac)}.pg{stroke:var(--gr)}.pm{stroke:var(--mut)}
+.ma{fill:var(--ac)}.mg{fill:var(--gr)}.mm{fill:var(--mut)}
+.tx{font:600 11px system-ui,sans-serif;fill:var(--ac)}.tg{fill:var(--gr)}
+.node{position:absolute;box-sizing:border-box;background:var(--box);border:1.5px solid var(--bd);border-radius:10px;padding:6px 8px;text-align:center;overflow:hidden}
+.ad{font:10px ui-monospace,Menlo,monospace;color:var(--mut)}
+.val{font-weight:700;font-size:14px}
+.val small{font-weight:500;color:var(--gr);font-size:11px}
+.ptrs{font:11px ui-monospace,Menlo,monospace;color:var(--mut);border-top:1px dashed var(--bd);margin-top:3px;padding-top:3px}
+.ptrs span{display:block}
+.node.new{background:var(--hi);border-color:var(--hib);animation:pop .3s}
+.node.float{border-style:dashed}
 .node.cmp{background:var(--cm);border-color:var(--ac);transform:scale(1.04)}
+.node.ce{background:color-mix(in srgb,var(--gr) 20%,var(--box));border-color:var(--gr);transform:scale(1.04)}
 .node.sw{background:var(--sw);border-color:var(--swb)}
-.node.found{background:rgba(var(--gr-rgb),.15);border-color:var(--gr)}
-
-/* Flechas y conectores */
-.ptr-lbl{position:absolute;font-weight:700;font-size:12px;color:var(--ac);white-space:nowrap}
-.ptr-edad{color:var(--gr)}
-.arrow{position:absolute;font-weight:700;color:var(--ac);font-size:16px;user-select:none}
-.null-box{position:absolute;font:700 12px ui-monospace,Menlo,monospace;color:var(--mut);padding:4px 6px;border:1px dashed var(--bd);border-radius:4px}
-
-/* Log de código */
-.log-box{background:var(--box);border:1.5px solid var(--bd);border-radius:8px;padding:10px 12px;margin-top:10px;font:12px/1.5 ui-monospace,Menlo,monospace;color:var(--mut)}
-.log-box b{color:var(--fg);font-size:13px}
-.log-box .code{color:var(--ac);font-weight:600;margin-top:2px}
-.leg{font-size:12px;color:var(--mut);margin:6px 0 10px}
-.theme-btn{padding:4px 8px;border-radius:6px;border:1px solid var(--bd);background:var(--card);cursor:pointer;font-size:12px}
+.node.found{background:color-mix(in srgb,var(--gr) 30%,var(--box));border-color:var(--gr)}
+@keyframes pop{from{transform:scale(.88);opacity:.5}}
+@media(prefers-reduced-motion:reduce){.node.new{animation:none}}
+.pl{position:absolute;font:700 11px ui-monospace,Menlo,monospace;color:var(--ac);white-space:nowrap}
+.pl.g{color:var(--gr)}
+.nul{position:absolute;font:700 11px ui-monospace,Menlo,monospace;color:var(--mut);padding:3px 6px;border:1px dashed var(--bd);border-radius:4px}
+.empty{position:absolute;font:700 12px ui-monospace,Menlo,monospace;color:var(--mut)}
+.row{position:absolute;left:0;display:flex;align-items:center;gap:6px;white-space:nowrap;color:var(--gr);font-size:12px}
+.chip{padding:3px 9px;border:1.5px solid var(--gr);border-radius:6px;background:var(--box);color:var(--fg);font-weight:600}
+.chip.ce,.chip.found,.chip.new{background:color-mix(in srgb,var(--gr) 28%,var(--box))}
+.chip.cmp{background:var(--cm);border-color:var(--ac)}
+.chip.sw{background:var(--sw);border-color:var(--swb)}
+.log{background:var(--box);border:1.5px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:13px}
+.code{font:12px/1.5 ui-monospace,Menlo,monospace;color:var(--ac);font-weight:600;margin-top:4px;overflow-x:auto}
+.meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--mut);font-size:12px;margin-top:6px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>
-    <span>Simulador de Listas Enlazadas</span>
-    <button class="theme-btn" id="tbtn">🌓 Tema</button>
-  </h1>
-  <p class="sub">Estructuras de Datos — Licenciatura en Informática UMB | Proyecto Segundo Parcial</p>
+  <h1><span>Simulador de Listas Enlazadas</span><button class="b" id="tbtn">🌓 Tema</button></h1>
+  <p class="sub">Estructuras de Datos — UMB. Cada operación se muestra paso a paso con su código Java.</p>
 
-  <!-- Pestañas -->
   <div class="tabs">
-    <button class="tab on" data-m="simple">1. Lista Simple</button>
-    <button class="tab" data-m="doble">2. Lista Doble</button>
-    <button class="tab" data-m="circular">3. Lista Circular</button>
-    <button class="tab" data-m="multi">4. Multilista (Nombre + Edad)</button>
+    <button class="tab on" data-m="simple">1. Simple</button>
+    <button class="tab" data-m="doble">2. Doble</button>
+    <button class="tab" data-m="circular">3. Circular</button>
+    <button class="tab" data-m="multi">4. Multilista</button>
   </div>
+  <div class="info" id="info"></div>
 
-  <!-- Controles adaptativos -->
-  <div class="ctl" id="ctlNum">
-    <input id="inDato" type="number" placeholder="Valor entero (ej: 25)" step="1">
-    <button class="b main" id="bInsFin">Insertar al Final</button>
-    <button class="b" id="bInsIni">Insertar al Inicio</button>
-    <button class="b" id="bElim">Eliminar</button>
-    <button class="b" id="bBuscar">Buscar</button>
-    <button class="b" id="bRev" style="display:none">Recorrido Inverso</button>
+  <!-- Controles para simple, doble y circular -->
+  <div class="ctl" id="cN">
+    <input id="v" type="number" step="1" placeholder="Valor entero (vacío = aleatorio)">
+    <button class="b main" data-a="fin">Insertar al final</button>
+    <button class="b" data-a="ini">Insertar al inicio</button>
+    <button class="b" data-a="del">Eliminar</button>
+    <button class="b" data-a="bus">Buscar</button>
+    <button class="b" data-a="rec">Recorrer</button>
+    <button class="b" data-a="inv" id="inv" hidden>Recorrido inverso</button>
   </div>
-
-  <div class="ctl" id="ctlMulti" style="display:none">
-    <input id="inNom" placeholder="Nombre (ej: Carlos)" maxlength="16">
-    <input id="inEdad" type="number" placeholder="Edad" min="1" max="120" step="1">
-    <button class="b main" id="bInsMulti">Insertar Persona</button>
-    <button class="b" id="bElimMulti">Eliminar por Nombre</button>
-    <button class="b" id="bBuscarMulti">Buscar por Nombre</button>
+  <!-- Controles de la multilista -->
+  <div class="ctl" id="cM" hidden>
+    <input id="nm" maxlength="16" placeholder="Nombre (ej: Carlos)">
+    <input id="ed" type="number" min="1" max="120" step="1" placeholder="Edad">
+    <button class="b main" data-a="ins">Insertar persona</button>
+    <button class="b" data-a="del">Eliminar por nombre</button>
+    <button class="b" data-a="bus">Buscar por nombre</button>
+    <button class="b" data-a="rec">Recorrer A-Z</button>
+    <button class="b" data-a="age">Recorrer por edad</button>
   </div>
-
-  <!-- Botones de utilidades y control -->
+  <!-- Utilidades y control de la animación -->
   <div class="ctl">
-    <button class="b" id="bEjemplo">Ejemplo rápido</button>
-    <button class="b" id="bVaciar">Vaciar lista</button>
+    <button class="b" data-a="ej">Ejemplo rápido</button>
+    <button class="b" data-a="vac">Vaciar</button>
     <span style="flex:1"></span>
-    <button class="b" id="bPause">Pausar</button>
-    <button class="b" id="bStep">Paso a paso</button>
-    <label class="sub" style="margin:0 0 0 6px">Velocidad:</label>
-    <select id="selSpd">
-      <option value="1300">Lenta</option>
-      <option value="650" selected>Normal</option>
-      <option value="250">Rápida</option>
-    </select>
+    <button class="b" data-a="pv" aria-label="Paso anterior">◀</button>
+    <button class="b" data-a="pp" id="pp">⏸ Pausar</button>
+    <button class="b" data-a="nx" aria-label="Paso siguiente">▶</button>
+    <button class="b" data-a="rp">↺ Repetir</button>
+    <select id="spd" aria-label="Velocidad"><option value="1300">Lenta</option><option value="700" selected>Normal</option><option value="280">Rápida</option></select>
   </div>
+  <div class="msg" id="msg" role="alert"></div>
+  <p class="leg"><b style="color:var(--hib)">Amarillo:</b> nodo nuevo · <b style="color:var(--ac)">Azul:</b> actual / comparando · <b style="color:var(--swb)">Naranja:</b> punteros que cambian · <b style="color:var(--gr)">Verde:</b> encontrado / cadena por edad</p>
 
-  <p class="leg">
-    Leyenda de colores: 
-    <b style="color:var(--ac)">■ Azul:</b> Recorriendo / Comparando · 
-    <b style="color:var(--hib)">■ Amarillo:</b> Nodo nuevo reservado · 
-    <b style="color:var(--swb)">■ Naranja:</b> Reconexión de punteros · 
-    <b style="color:var(--gr)">■ Verde:</b> Encontrado / Criterio Edad
-  </p>
+  <div class="view"><div class="scroll"><div class="stg" id="stg"></div></div></div>
 
-  <!-- Escenario de Animación -->
-  <div class="view">
-    <div class="scroll">
-      <div class="stg" id="stage"></div>
-    </div>
-  </div>
-
-  <!-- Log de Código Java en tiempo real -->
-  <div class="log-box" id="logBox">
-    <div><b>Acción actual:</b> <span id="logDesc">Selecciona una operación para comenzar.</span></div>
-    <div class="code" id="logCode">// Código Java ejecutándose en tiempo real</div>
+  <div class="log" aria-live="polite">
+    <div id="ld"></div>
+    <div class="code" id="lc"></div>
+    <div class="meta"><span id="st"></span><span id="cnt"></span></div>
   </div>
 </div>
 
 <script>
-// =============================================================================
-// MOTOR DEL SIMULADOR Y UTILIDADES
-// =============================================================================
-const $ = id => document.getElementById(id);
-let mode = 'simple'; // 'simple', 'doble', 'circular', 'multi'
-let uid = 0, nAddr = 0;
-const genAddr = () => '0x' + (0x1A00 + ((++nAddr * 37) % 128) * 16).toString(16).toUpperCase();
+// ============================ ESTADO GENERAL ============================
+const $ = id => document.getElementById(id);                 // atajo para buscar elementos por id
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); // evita inyectar HTML con los nombres
+const MAX = 12;                                                // máximo de nodos para que el dibujo quepa
+const CLS = {simple:'Nodo', doble:'NodoDoble', circular:'Nodo', multi:'NodoMulti'}; // clase Java de cada lista
+const INFO = {
+  simple:'Cada nodo guarda un dato y la dirección del siguiente. Insertar al inicio es O(1); insertar al final, buscar y eliminar son O(n).',
+  doble:'Cada nodo guarda anterior y siguiente, y la lista conserva cabeza y cola. Insertar al final es O(1) gracias a cola, y se puede recorrer al revés.',
+  circular:'El último nodo apunta de vuelta a la cabeza: no existe null. Los recorridos se detienen al volver a cabeza para no ciclar sin fin.',
+  multi:'Un mismo nodo vive en dos cadenas a la vez: por nombre (A-Z, azul) y por edad (menor a mayor, verde). Cada inserción o eliminación actualiza ambas.'
+};
+let mode = 'simple', uid = 0, nA = 0;                          // modo activo, contador de ids, contador de direcciones
+const D = {simple:[], doble:[], circular:[], multi:[]};        // datos de cada lista, en orden de enlace
+const lst = () => D[mode];                                     // lista del modo activo
+const addr = () => '0x' + (0x1A00 + ((++nA * 37) % 128) * 16).toString(16).toUpperCase(); // dirección simulada
+const mk = (d, nom, edad) => ({u:++uid, d, nom, edad, ad:addr()}); // crea un nodo (u = identificador único)
+const byAge = L => [...L].sort((a, b) => a.edad - b.edad || a.u - b.u); // orden de la cadena por edad
+const msg = t => $('msg').textContent = t;                     // muestra un aviso de validación
 
-// Estados de las listas
-let L_Simple = []; // [{u, d, ad}]
-let L_Doble = [];  // [{u, d, ad}]
-let L_Circ = [];   // [{u, d, ad}]
-let L_Multi = [];  // [{u, nom, edad, ad}]
-
-// Cola de Pasos/Snapshots
-let steps = [];
-let stepIdx = 0;
-let timer = null;
-let isPaused = false;
-
-// Snapshot de la estructura
-function snap() {
-  return {
-    mode,
-    simple: L_Simple.map(x=>({...x})),
-    doble: L_Doble.map(x=>({...x})),
-    circ: L_Circ.map(x=>({...x})),
-    multi: L_Multi.map(x=>({...x}))
-  };
+// ============================ CUADROS DE ANIMACIÓN ============================
+let steps = [], cur = 0, timer = null, paused = false;
+// F guarda un cuadro: texto, código Java, nodos resaltados, nodo nuevo flotante y copia de la lista en ese instante
+function F(desc, code, hi = {}, nw = null) {
+  steps.push({desc, code, hi, nw, mode, L: D[mode].map(n => ({...n}))});
 }
-
-// Registrar fotograma (Frame)
-function F(desc, code, hi = {}) {
-  steps.push({ desc, code, hi, sn: snap() });
+function go(i) { cur = Math.max(0, Math.min(i, steps.length - 1)); draw(steps[cur]); } // muestra el cuadro i
+function play() {                                              // avanza solo, según la velocidad elegida
+  clearInterval(timer);
+  timer = setInterval(() => { if (!paused && cur < steps.length - 1) go(cur + 1); }, +$('spd').value);
 }
+function start() { paused = false; $('pp').textContent = '⏸ Pausar'; go(0); play(); }
+function idle(t) { clearInterval(timer); steps = []; F(t, '// Elige una operación para ver el código Java paso a paso'); go(0); } // cuadro único sin animación
 
-// Ejecutar siguiente paso
-function nextStep() {
-  if (stepIdx >= steps.length) {
-    if (timer) clearInterval(timer);
-    timer = null;
-    return false;
-  }
-  const f = steps[stepIdx++];
-  render(f);
-  return true;
+// ============================ OPERACIONES: SIMPLE, DOBLE, CIRCULAR ============================
+// Recorre desde cabeza hasta el último nodo, un cuadro por nodo visitado
+function walkLast(n) {
+  const L = lst(), fin = mode === 'circular' ? 'cabeza' : 'null';
+  F(`actual = cabeza (${L[0].ad}).`, 'Nodo actual = cabeza;', {[L[0].u]:'cmp'}, n);
+  for (let i = 1; i < L.length; i++)
+    F(`${L[i-1].ad}.sig no es ${fin}: actual avanza a ${L[i].ad}.`, `actual = actual.getSiguiente(); // while (actual.getSiguiente() != ${fin})`, {[L[i].u]:'cmp'}, n);
+  return L[L.length - 1];
 }
-
-function play() {
-  if (timer) clearInterval(timer);
-  const spd = parseInt($('selSpd').value);
-  timer = setInterval(() => {
-    if (!isPaused) {
-      if (!nextStep()) clearInterval(timer);
-    }
-  }, spd);
+// Caso común: insertar en una lista vacía
+function firstNode(n) {
+  lst().push(n);
+  const t = {simple:'cabeza = nuevo;', doble:'cabeza = nuevo; cola = nuevo;', circular:'cabeza = nuevo; nuevo.setSiguiente(nuevo); // se apunta a sí mismo'}[mode];
+  F('Lista vacía: el nuevo nodo es la cabeza' + (mode === 'doble' ? ' y la cola.' : mode === 'circular' ? ' y se apunta a sí mismo.' : '.'), t, {[n.u]:'found'});
 }
-
-// =============================================================================
-// ALGORITMOS DE CADA ESTRUCTURA
-// =============================================================================
-
-// 1. LISTA SIMPLE
-function simInsertarSimpleFin(val) {
-  steps = []; stepIdx = 0;
-  const ad = genAddr();
-  const e = { u: ++uid, d: val, ad };
-  F(`Creando nuevo nodo con dato ${val} en memoria`, `Nodo nuevo = new Nodo(${val}); // Reservado en ${ad}`, {[e.u]: 'new'});
-  
-  if (L_Simple.length === 0) {
-    F(`Lista vacía: cabeza apunta directamente al nuevo nodo`, `cabeza = nuevo;`, {[e.u]: 'new'});
-    L_Simple.push(e);
-  } else {
-    F(`Recorriendo lista desde cabeza (${L_Simple[0].ad}) hasta el último nodo`, `Nodo actual = cabeza; while (actual.getSiguiente() != null) actual = actual.getSiguiente();`, {[L_Simple[0].u]: 'cmp'});
-    for (let i = 0; i < L_Simple.length - 1; i++) {
-      F(`Avanzando puntero auxiliar en ${L_Simple[i].ad}`, `actual = actual.getSiguiente(); // Ahora en ${L_Simple[i+1].ad}`, {[L_Simple[i+1].u]: 'cmp'});
-    }
-    const last = L_Simple[L_Simple.length - 1];
-    F(`El último nodo (${last.ad}) conecta su puntero siguiente al nuevo (${ad})`, `actual.setSiguiente(nuevo);`, {[last.u]: 'sw', [e.u]: 'new'});
-    L_Simple.push(e);
-  }
-  F(`Inserción finalizada. Tamaño: ${L_Simple.length}`, `tamano++;`, {});
-  play();
+function insFin(v) {
+  const L = lst(), n = mk(v), c = CLS[mode];
+  n.at = L.length;                                             // posición donde se dibuja el nodo flotante
+  F(`Se reserva un nodo nuevo con dato ${v} en ${n.ad}. Aún no está enlazado.`, `${c} nuevo = new ${c}(${v});`, {[n.u]:'new'}, n);
+  if (!L.length) return firstNode(n);
+  let last;
+  if (mode === 'doble') { last = L[L.length-1]; F(`cola apunta al último nodo (${last.ad}): no hace falta recorrer, O(1).`, 'NodoDoble ult = cola;', {[last.u]:'cmp'}, n); }
+  else last = walkLast(n);
+  const t = {simple:'actual.setSiguiente(nuevo);', doble:'ult.setSiguiente(nuevo); nuevo.setAnterior(ult); cola = nuevo;', circular:'actual.setSiguiente(nuevo); nuevo.setSiguiente(cabeza);'}[mode];
+  F(`Se enlaza el último nodo con el nuevo${mode === 'circular' ? ' y el nuevo vuelve a cabeza' : ''}.`, t, {[last.u]:'sw'}, n);
+  L.push(n);
+  F(`Nodo insertado. tamano = ${L.length}.`, 'tamano++;', {[n.u]:'new', [last.u]:'sw'});
 }
-
-function simInsertarSimpleIni(val) {
-  steps = []; stepIdx = 0;
-  const ad = genAddr();
-  const e = { u: ++uid, d: val, ad };
-  F(`Creando nuevo nodo con dato ${val}`, `Nodo nuevo = new Nodo(${val}); // Reservado en ${ad}`, {[e.u]: 'new'});
-  
-  if (L_Simple.length > 0) {
-    F(`Nuevo nodo conecta su siguiente a la cabeza actual (${L_Simple[0].ad})`, `nuevo.setSiguiente(cabeza);`, {[e.u]: 'new', [L_Simple[0].u]: 'sw'});
-  }
-  F(`cabeza se actualiza para apuntar al nuevo nodo`, `cabeza = nuevo;`, {[e.u]: 'new'});
-  L_Simple.unshift(e);
-  F(`Inserción al inicio completada. O(1)`, `tamano++;`, {});
-  play();
+function insIni(v) {
+  const L = lst(), n = mk(v), c = CLS[mode];
+  n.at = 0;
+  F(`Se reserva un nodo nuevo con dato ${v} en ${n.ad}. Aún no está enlazado.`, `${c} nuevo = new ${c}(${v});`, {[n.u]:'new'}, n);
+  if (!L.length) return firstNode(n);
+  const f = L[0];
+  if (mode === 'circular') {                                   // el último debe apuntar a la nueva cabeza
+    const last = walkLast(n);
+    F(`El último (${last.ad}) apunta al nuevo y el nuevo a la cabeza actual (${f.ad}).`, 'ult.setSiguiente(nuevo); nuevo.setSiguiente(cabeza);', {[last.u]:'sw', [f.u]:'sw'}, n);
+  } else if (mode === 'doble')
+    F(`nuevo.sig = cabeza (${f.ad}) y cabeza.ant = nuevo.`, 'nuevo.setSiguiente(cabeza); cabeza.setAnterior(nuevo);', {[f.u]:'sw'}, n);
+  else F(`nuevo.sig apunta a la cabeza actual (${f.ad}).`, 'nuevo.setSiguiente(cabeza);', {[f.u]:'sw'}, n);
+  L.unshift(n);
+  F(`cabeza se mueve al nodo nuevo. tamano = ${L.length}.`, 'cabeza = nuevo; tamano++;', {[n.u]:'new'});
 }
-
-function simEliminarSimple(val) {
-  steps = []; stepIdx = 0;
-  if (!L_Simple.length) {
-    F(`Lista vacía. No hay elementos a eliminar`, `if (cabeza == null) return false;`, {});
-    play(); return;
+// Compara nodo por nodo; devuelve el índice encontrado o -1
+function find(v) {
+  const L = lst();
+  for (let k = 0; k < L.length; k++) {
+    F(`Comparando ${L[k].ad}: ¿${L[k].d} == ${v}?`, `${k ? 'actual = actual.getSiguiente(); ' : ''}if (actual.getDato() == ${v})`, {[L[k].u]:'cmp'});
+    if (L[k].d === v) return k;
   }
-  F(`Buscando ${val} para eliminar`, `if (cabeza.getDato() == ${val}) ...`, {[L_Simple[0].u]: 'cmp'});
-  if (L_Simple[0].d === val) {
-    F(`El elemento está en cabeza. cabeza avanza al siguiente`, `cabeza = cabeza.getSiguiente(); // Desenlazado`, {[L_Simple[0].u]: 'sw'});
-    L_Simple.shift();
-    F(`Nodo eliminado de memoria. tamano = ${L_Simple.length}`, `tamano--; return true;`, {});
-    play(); return;
-  }
-  let idx = -1;
-  for (let i = 0; i < L_Simple.length - 1; i++) {
-    F(`Verificando siguiente de ${L_Simple[i].ad}`, `if (actual.getSiguiente().getDato() == ${val})`, {[L_Simple[i].u]: 'cmp', [L_Simple[i+1].u]: 'cmp'});
-    if (L_Simple[i+1].d === val) { idx = i; break; }
-  }
-  if (idx !== -1) {
-    const prev = L_Simple[idx], target = L_Simple[idx+1];
-    F(`Reconectando: ${prev.ad} saltará a ${target.ad} y apuntará a su siguiente`, `actual.setSiguiente(actual.getSiguiente().getSiguiente());`, {[prev.u]: 'sw', [target.u]: 'sw'});
-    L_Simple.splice(idx + 1, 1);
-    F(`Nodo desenlazado y recolectado por GC`, `tamano--; return true;`, {});
-  } else {
-    F(`El valor ${val} no fue encontrado en la lista`, `return false; // No encontrado`, {});
-  }
-  play();
+  return -1;
 }
-
-// 2. LISTA DOBLE
-function simInsertarDoble(val) {
-  steps = []; stepIdx = 0;
-  const ad = genAddr();
-  const e = { u: ++uid, d: val, ad };
-  F(`Creando NodoDoble con dato ${val}`, `NodoDoble nuevo = new NodoDoble(${val}); // En ${ad}`, {[e.u]: 'new'});
-  if (!L_Doble.length) {
-    F(`Lista doble vacía: cabeza = nuevo`, `cabeza = nuevo; cola = nuevo;`, {[e.u]: 'new'});
-    L_Doble.push(e);
-  } else {
-    const last = L_Doble[L_Doble.length - 1];
-    F(`Recorriendo hasta la cola: ${last.ad}`, `NodoDoble actual = cabeza; ...`, {[last.u]: 'cmp'});
-    F(`Conexión bidireccional: último.siguiente = nuevo; nuevo.anterior = último`, `actual.setSiguiente(nuevo); nuevo.setAnterior(actual);`, {[last.u]: 'sw', [e.u]: 'new'});
-    L_Doble.push(e);
-  }
-  F(`Nodo doble enlazado bidireccionalmente. Tamaño: ${L_Doble.length}`, `tamano++;`, {});
-  play();
+function bus(v) {
+  const L = lst();
+  if (!L.length) return F('Lista vacía: no hay nada que buscar.', 'if (cabeza == null) return false;');
+  const i = find(v);
+  if (i >= 0) F(`¡${v} encontrado en ${L[i].ad}! (posición ${i})`, 'return true;', {[L[i].u]:'found'});
+  else F(`${v} no está en la lista${mode === 'circular' ? ': se volvió a cabeza sin encontrarlo.' : ' (se llegó a null).'}`, 'return false;');
 }
-
-function simRecorridoInversoDoble() {
-  steps = []; stepIdx = 0;
-  if (!L_Doble.length) { F('Lista doble vacía', '// Lista vacía', {}); play(); return; }
-  F(`Iniciando recorrido inverso desde la cola`, `NodoDoble actual = cola;`, {[L_Doble[L_Doble.length-1].u]: 'found'});
-  for (let i = L_Doble.length - 1; i >= 0; i--) {
-    F(`Navegando hacia atrás por puntero 'anterior': ${L_Doble[i].ad} (Dato: ${L_Doble[i].d})`, `actual = actual.getAnterior();`, {[L_Doble[i].u]: 'found'});
-  }
-  F(`Recorrido inverso completado en cabeza`, `// Llegada a cabeza (anterior == null)`, {});
-  play();
-}
-
-// 3. LISTA CIRCULAR
-function simInsertarCircular(val) {
-  steps = []; stepIdx = 0;
-  const ad = genAddr();
-  const e = { u: ++uid, d: val, ad };
-  F(`Creando NodoCircular con dato ${val}`, `Nodo nuevo = new Nodo(${val}); // En ${ad}`, {[e.u]: 'new'});
-  if (!L_Circ.length) {
-    F(`Lista vacía: nuevo nodo se apunta a SÍ MISMO para cerrar el ciclo`, `cabeza = nuevo; nuevo.setSiguiente(cabeza);`, {[e.u]: 'new'});
-    L_Circ.push(e);
-  } else {
-    const last = L_Circ[L_Circ.length - 1];
-    F(`Recorriendo hasta el último nodo antes de cabeza`, `while (actual.getSiguiente() != cabeza) actual = actual.getSiguiente();`, {[last.u]: 'cmp'});
-    F(`Reconectando ciclo: último apunta a nuevo, y nuevo apunta de regreso a cabeza (${L_Circ[0].ad})`, `actual.setSiguiente(nuevo); nuevo.setSiguiente(cabeza);`, {[last.u]: 'sw', [e.u]: 'new', [L_Circ[0].u]: 'cmp'});
-    L_Circ.push(e);
-  }
-  F(`Ciclo cerrado preservado. Tamaño: ${L_Circ.length}`, `tamano++; // Ciclo activo`, {});
-  play();
-}
-
-// 4. MULTILISTA (Nombre + Edad)
-function simInsertarMulti(nom, edad) {
-  steps = []; stepIdx = 0;
-  const ad = genAddr();
-  const e = { u: ++uid, nom, edad, ad };
-  F(`Creando un ÚNICO objeto NodoMulti en memoria para "${nom}" (${edad} años)`, 
-    `NodoMulti nuevo = new NodoMulti("${nom}", ${edad}); // Reservado en Heap: ${ad}`, {[e.u]: 'new'});
-
-  // Inserción en Criterio 1: Alfabético A-Z
-  let posAlfa = 0;
-  if (!L_Multi.length || nom.localeCompare(L_Multi[0].nom, undefined, {sensitivity:'base'}) <= 0) {
-    F(`Criterio 1 (A-Z): "${nom}" es menor alfabéticamente que la cabeza actual`, 
-      `nuevo.setSiguiente(cabeza); cabeza = nuevo;`, {[e.u]: 'new'});
-    posAlfa = 0;
-  } else {
-    F(`Criterio 1 (A-Z): Buscando posición alfabética para "${nom}"`, 
-      `while (actual.getSiguiente() != null && siguiente.nombre <= "${nom}") ...`, {[L_Multi[0].u]: 'cmp'});
-    let i = 0;
-    while (i + 1 < L_Multi.length && L_Multi[i+1].nom.localeCompare(nom, undefined, {sensitivity:'base'}) <= 0) {
-      i++;
-      F(`Avanzando en cadena alfabética por ${L_Multi[i].ad} ("${L_Multi[i].nom}")`, `actualAlfa = actualAlfa.getSiguiente();`, {[L_Multi[i].u]: 'cmp'});
-    }
-    posAlfa = i + 1;
-    F(`Criterio 1: Enlazando "${nom}" alfabéticamente después de "${L_Multi[i].nom}"`, 
-      `nuevo.setSiguiente(actual.getSiguiente()); actual.setSiguiente(nuevo);`, {[L_Multi[i].u]: 'sw', [e.u]: 'new'});
-  }
-
-  // Insertar en array local alfabético
-  L_Multi.splice(posAlfa, 0, e);
-
-  // Explicación de Criterio 2: Orden de Edad
-  F(`Criterio 2 (Edad): Con el MISMO objeto físico ${ad}, ahora se enlaza en la cadena de edades por 'siguienteEdad'`, 
-    `// El mismo NodoMulti se entrelaza por cabezaEdad y siguienteEdad`, {[e.u]: 'found'});
-
-  F(`¡Inserción dual completada! "${nom}" está enlazado simultáneamente por Nombre (A-Z) y por Edad (${edad})`, 
-    `tamano++; // Consistencia atómica en 2 dimensiones`, {[e.u]: 'found'});
-  play();
-}
-
-function simEliminarMulti(nom) {
-  steps = []; stepIdx = 0;
-  if (!L_Multi.length) { F('Multilista vacía', '// Vacía', {}); play(); return; }
-  const idx = L_Multi.findIndex(x => x.nom.toLowerCase() === nom.toLowerCase());
-  if (idx === -1) {
-    F(`"${nom}" no existe en la Multilista`, `if (!buscar("${nom}")) return false;`, {});
-    play(); return;
-  }
-  const target = L_Multi[idx];
-  F(`Persona encontrada: "${target.nom}" en ${target.ad}`, `NodoMulti target = buscarNodo("${nom}");`, {[target.u]: 'cmp'});
-  F(`Desenlace atómico: se desconecta de la cadena alfabética y de la cadena de edades a la vez`, 
-    `desenlazarAlfa(target); desenlazarEdad(target); // GC reclamará la memoria`, {[target.u]: 'sw'});
-  L_Multi.splice(idx, 1);
-  F(`Persona eliminada con éxito de ambas dimensiones. Tamaño: ${L_Multi.length}`, `tamano--; return true;`, {});
-  play();
-}
-
-// =============================================================================
-// RENDERIZADO VISUAL
-// =============================================================================
-function render(frame) {
-  $('logDesc').textContent = frame.desc;
-  $('logCode').textContent = frame.code;
-  const stage = $('stage');
-  stage.innerHTML = '';
-  const sn = frame.sn;
-  const hi = frame.hi || {};
-
-  if (mode === 'simple') {
-    renderCadenaLineal(stage, sn.simple, hi, 'cabeza');
+function del(v) {
+  const L = lst();
+  if (!L.length) return F('Lista vacía: no hay nada que eliminar.', 'if (cabeza == null) return false;');
+  const i = find(v);
+  if (i < 0) return F(`${v} no está en la lista.`, 'return false; // no encontrado');
+  const t = L[i], p = L[i-1], nx = L[i+1], last = L[L.length-1];
+  if (L.length === 1) F('Era el único nodo: la lista queda vacía.', 'cabeza = null;' + (mode === 'doble' ? ' cola = null;' : ''), {[t.u]:'sw'});
+  else if (i === 0) {
+    if (mode === 'circular') F(`El último (${last.ad}) debe apuntar a la nueva cabeza (${nx.ad}) para conservar el ciclo.`, 'ult.setSiguiente(cabeza.getSiguiente()); cabeza = cabeza.getSiguiente();', {[last.u]:'sw', [t.u]:'sw', [nx.u]:'cmp'});
+    else if (mode === 'doble') F(`cabeza avanza a ${nx.ad} y su anterior pasa a null.`, 'cabeza = cabeza.getSiguiente(); cabeza.setAnterior(null);', {[t.u]:'sw', [nx.u]:'sw'});
+    else F(`cabeza avanza al siguiente nodo (${nx.ad}).`, 'cabeza = cabeza.getSiguiente();', {[t.u]:'sw', [nx.u]:'cmp'});
   } else if (mode === 'doble') {
-    renderCadenaDoble(stage, sn.doble, hi);
-  } else if (mode === 'circular') {
-    renderCadenaCircular(stage, sn.circ, hi);
-  } else if (mode === 'multi') {
-    renderCadenaMulti(stage, sn.multi, hi);
-  }
+    F(nx ? `${p.ad}.sig salta a ${nx.ad} y ${nx.ad}.ant regresa a ${p.ad}.` : `${p.ad}.sig queda en null y cola retrocede a ${p.ad}.`,
+      nx ? 'ant.setSiguiente(actual.getSiguiente()); actual.getSiguiente().setAnterior(ant);' : 'ant.setSiguiente(null); cola = ant;',
+      {[p.u]:'sw', [t.u]:'sw', ...(nx ? {[nx.u]:'sw'} : {})});
+  } else F(`${p.ad}.sig salta a ${nx ? nx.ad : (mode === 'circular' ? L[0].ad + ' (cabeza)' : 'null')}.`, 'ant.setSiguiente(actual.getSiguiente());', {[p.u]:'sw', [t.u]:'sw'});
+  L.splice(i, 1);
+  F(`Nodo ${v} desenlazado; el recolector de basura libera su memoria. tamano = ${L.length}.`, 'tamano--; return true;');
+}
+// Recorrido normal, inverso (solo doble) o por edad (solo multilista); acumula la salida impresa
+function trav(rev, age) {
+  const L = lst();
+  if (!L.length) return F('Lista vacía: no hay nada que recorrer.', 'if (cabeza == null) return;');
+  const seq = age ? byAge(L) : rev ? [...L].reverse() : L;
+  const hd = age ? 'cabezaEdad' : rev ? 'cola' : 'cabeza', nx = age ? 'getSigEdad' : rev ? 'getAnterior' : mode === 'multi' ? 'getSigNom' : 'getSiguiente';
+  let out = '';
+  seq.forEach((e, k) => {
+    out += (mode === 'multi' ? `${e.nom}(${e.edad})` : e.d) + ' ';
+    F(`Visita ${e.ad}. Salida acumulada: ${out}`, `${k ? `actual = actual.${nx}(); ` : `${CLS[mode]} actual = ${hd}; `}System.out.print(actual.${mode === 'multi' ? 'getNombre' : 'getDato'}());`, {[e.u]: age ? 'ce' : 'cmp'});
+  });
+  F(mode === 'circular' ? 'actual.sig vuelve a cabeza: se completó la vuelta y el recorrido termina.' : 'actual es null: fin del recorrido.', mode === 'circular' ? '} while (actual != cabeza);' : '} // actual == null');
 }
 
-function renderCadenaLineal(stg, list, hi, ptrName) {
-  const itemW = 110, gap = 44, top = 40;
-  let html = `<span class="ptr-lbl" style="left:0;top:${top+18}px">${ptrName} →</span>`;
-  if (!list.length) {
-    html += `<div class="null-box" style="left:70px;top:${top+14}px">NULL</div>`;
-    stg.style.width = '300px'; stg.style.height = '120px';
-    stg.innerHTML = html; return;
+// ============================ OPERACIONES: MULTILISTA ============================
+// Busca por nombre en la cadena A-Z; devuelve el índice o -1
+function findM(nom) {
+  const L = D.multi;
+  for (let k = 0; k < L.length; k++) {
+    F(`Cadena A-Z: ¿«${L[k].nom}» es «${nom}»?`, `${k ? 'actual = actual.getSigNom(); ' : ''}if (actual.getNombre().equalsIgnoreCase("${nom}"))`, {[L[k].u]:'cmp'});
+    if (L[k].nom.toLowerCase() === nom.toLowerCase()) return k;
   }
-  list.forEach((e, i) => {
-    const x = 70 + i * (itemW + gap);
-    const cls = hi[e.u] || '';
-    html += `
-      <div class="node ${cls}" style="left:${x}px;top:${top}px;width:${itemW}px">
-        <div class="ad">${e.ad}</div>
-        <div class="val">${e.d}</div>
-        <div class="ptrs">sig: ${i + 1 < list.length ? list[i+1].ad : 'null'}</div>
-      </div>
-      <div class="arrow" style="left:${x + itemW + 10}px;top:${top+18}px">${i + 1 < list.length ? '→' : '→ <span class="null-box">NULL</span>'}</div>
-    `;
-  });
-  stg.style.width = Math.max(340, 70 + list.length * (itemW + gap) + 60) + 'px';
-  stg.style.height = '120px';
-  stg.innerHTML = html;
+  return -1;
+}
+function busM(nom) {
+  const L = D.multi;
+  if (!L.length) return F('Multilista vacía.', 'if (cabeza == null) return false;');
+  const i = findM(nom);
+  if (i >= 0) F(`¡«${L[i].nom}» encontrado en ${L[i].ad}! Tiene ${L[i].edad} años.`, 'return true;', {[L[i].u]:'found'});
+  else F(`«${nom}» no existe en la multilista.`, 'return false;');
+}
+function insMulti(nom, edad) {
+  const L = D.multi, n = mk(nom, nom, edad), cmp = (a, b) => a.localeCompare(b, 'es', {sensitivity:'base'});
+  let pos = 0;
+  while (pos < L.length && cmp(L[pos].nom, nom) <= 0) pos++;   // posición A-Z (después de nombres iguales)
+  n.at = pos;
+  F(`Se crea UN solo nodo para «${nom}» (${edad} años) en ${n.ad}; después se enlaza en las dos cadenas.`, `NodoMulti nuevo = new NodoMulti("${nom}", ${edad});`, {[n.u]:'new'}, n);
+  for (let k = 0; k <= pos && k < L.length; k++)
+    F(`Cadena A-Z: «${L[k].nom}» ${k < pos ? 'va antes de' : 'va después de'} «${nom}».`, `${k ? 'actual = actual.getSigNom(); ' : ''}// compareToIgnoreCase("${nom}") ${k < pos ? '<= 0: avanzar' : '> 0: parar aquí'}`, {[L[k].u]:'cmp'}, n);
+  F(`Cadena A-Z: se enlaza ${pos ? `después de «${L[pos-1].nom}»` : 'como nueva cabeza'}.`,
+    pos ? 'nuevo.setSigNom(ant.getSigNom()); ant.setSigNom(nuevo);' : 'nuevo.setSigNom(cabeza); cabeza = nuevo;',
+    {[n.u]:'new', ...(pos ? {[L[pos-1].u]:'sw'} : {})}, n);
+  const E = byAge(L);
+  let q = 0;
+  while (q < E.length && E[q].edad <= edad) q++;               // posición en la cadena por edad
+  for (let k = 0; k <= q && k < E.length; k++)
+    F(`Cadena de edades: ${E[k].edad} ${k < q ? '≤' : '>'} ${edad}${k < q ? ', se sigue.' : ', se inserta antes.'}`, `${k ? 'actualEdad = actualEdad.getSigEdad(); ' : 'actualEdad = cabezaEdad; '}// ${E[k].edad} ${k < q ? '<=' : '>'} ${edad}`, {[E[k].u]:'ce'}, n);
+  F(`Cadena de edades: se enlaza ${q ? `después de «${E[q-1].nom}»` : 'como nueva cabezaEdad'}.`,
+    q ? 'nuevo.setSigEdad(antEdad.getSigEdad()); antEdad.setSigEdad(nuevo);' : 'nuevo.setSigEdad(cabezaEdad); cabezaEdad = nuevo;',
+    {[n.u]:'new', ...(q ? {[E[q-1].u]:'sw'} : {})}, n);
+  L.splice(pos, 0, n);
+  F(`Listo: «${nom}» está en la cadena A-Z y en la cadena por edad. tamano = ${L.length}.`, 'tamano++;', {[n.u]:'found'});
+}
+function delMulti(nom) {
+  const L = D.multi;
+  if (!L.length) return F('Multilista vacía.', 'if (cabeza == null) return false;');
+  const i = findM(nom);
+  if (i < 0) return F(`«${nom}» no está en la multilista.`, 'return false;');
+  const t = L[i], p = L[i-1], E = byAge(L), j = E.indexOf(t);
+  F(`Cadena A-Z: se desenlaza «${t.nom}».`, i ? 'ant.setSigNom(actual.getSigNom());' : 'cabeza = cabeza.getSigNom();', {[t.u]:'sw', ...(p ? {[p.u]:'sw'} : {})});
+  for (let k = 0; k <= j; k++)
+    F(`Cadena de edades: recorriendo hasta «${t.nom}» (${t.edad} años).`, `actualEdad = ${k ? 'actualEdad.getSigEdad()' : 'cabezaEdad'};`, {[E[k].u]:'ce'});
+  F('Cadena de edades: se desenlaza también.', j ? 'antEdad.setSigEdad(actual.getSigEdad());' : 'cabezaEdad = cabezaEdad.getSigEdad();', {[t.u]:'sw', ...(j ? {[E[j-1].u]:'sw'} : {})});
+  L.splice(i, 1);
+  F(`«${t.nom}» salió de las dos cadenas. tamano = ${L.length}.`, 'tamano--; return true;');
 }
 
-function renderCadenaDoble(stg, list, hi) {
-  const itemW = 125, gap = 46, top = 40;
-  let html = `<div class="null-box" style="left:0;top:${top+18}px">NULL ←</div><span class="ptr-lbl" style="left:55px;top:${top+18}px">cabeza →</span>`;
-  if (!list.length) {
-    html += `<div class="null-box" style="left:130px;top:${top+18}px">NULL</div>`;
-    stg.style.width = '340px'; stg.style.height = '120px';
-    stg.innerHTML = html; return;
-  }
-  list.forEach((e, i) => {
-    const x = 125 + i * (itemW + gap);
-    const cls = hi[e.u] || '';
-    const prev = i > 0 ? list[i-1].ad : 'null';
-    const next = i + 1 < list.length ? list[i+1].ad : 'null';
-    html += `
-      <div class="node ${cls}" style="left:${x}px;top:${top}px;width:${itemW}px">
-        <div class="ad">${e.ad}</div>
-        <div class="val">${e.d}</div>
-        <div class="ptrs">ant: ${prev} | sig: ${next}</div>
-      </div>
-      <div class="arrow" style="left:${x + itemW + 8}px;top:${top+18}px">${i + 1 < list.length ? '⇄' : '→ <span class="null-box">NULL</span>'}</div>
-    `;
+// ============================ DIBUJO ============================
+// Dibuja un cuadro: nodos en HTML y flechas en SVG
+function draw(f) {
+  const L = f.L, m = f.mode, mu = m === 'multi', db = m === 'doble', ci = m === 'circular', n = L.length;
+  const W = mu ? 150 : db ? 132 : 112, G = 58, H = mu || db ? 80 : 62, X0 = db ? 66 : 60, Y0 = 118, yc = Y0 + H / 2;
+  const xs = i => X0 + i * (W + G);                            // x de cada nodo
+  const E = mu ? byAge(L) : [];                                // cadena por edad (solo multilista)
+  const nx = i => L[i+1] ? L[i+1].ad : ci ? L[0].ad : 'null';  // dirección del siguiente
+  const ptrs = i => db ? [`ant: ${i ? L[i-1].ad : 'null'}`, `sig: ${nx(i)}`]
+    : mu ? [`sigNom: ${nx(i)}`, `sigEdad: ${(E[E.indexOf(L[i]) + 1] || {ad:'null'}).ad}`] : [`sig: ${nx(i)}`];
+  const box = (e, x, y, cls, p) => `<div class="node ${cls}" style="left:${x}px;top:${y}px;width:${W}px;height:${H}px"><div class="ad">${e.ad}</div><div class="val">${esc(e.d)}${mu ? ` <small>(${e.edad} años)</small>` : ''}</div><div class="ptrs">${p.map(t => `<span>${t}</span>`).join('')}</div></div>`;
+  const P = (d, c, k) => `<path d="${d}" class="${c}" marker-end="url(#${k})"/>`;       // flecha
+  const nul = (x, y) => `<div class="nul" style="left:${x}px;top:${y - 11}px">NULL</div>`;
+  const lab = (i, t, lv, c) => `<span class="pl ${c}" style="left:${xs(i)}px;top:${Y0 - 18 - lv * 16}px">${t} ▾</span>`; // etiqueta sobre un nodo
+  let h = '', s = '<defs>' + ['ma','mg','mm'].map(k => `<marker id="${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" class="${k}"/></marker>`).join('') + '</defs>';
+  const yb = Y0 + H;
+  if (!n) h += `<div class="empty" style="left:${X0}px;top:${yc - 8}px">cabeza = null${db ? ' · cola = null' : ''}</div>`;
+  L.forEach((e, i) => {
+    const c = f.hi[e.u] || '', x1 = xs(i) + W, x2 = xs(i + 1), ys = db ? Y0 + H * .38 : mu ? Y0 + H * .4 : yc;
+    h += box(e, xs(i), Y0, c, ptrs(i));
+    if (i < n - 1) {
+      s += P(`M${x1} ${ys}H${x2 - 2}`, 'pa', 'ma');                        // flecha hacia el siguiente
+      if (db) s += P(`M${x2} ${Y0 + H * .72}H${x1 + 2}`, 'pa', 'ma');      // flecha de regreso (anterior)
+    } else if (!ci) { s += P(`M${x1} ${ys}H${x1 + 22}`, 'pm', 'mm'); h += nul(x1 + 26, ys); }
+    if (c === 'cmp' || c === 'ce') h += lab(i, c === 'ce' ? 'actualEdad' : 'actual', 1, c === 'ce' ? 'g' : '');
   });
-  stg.style.width = Math.max(360, 125 + list.length * (itemW + gap) + 60) + 'px';
-  stg.style.height = '120px';
-  stg.innerHTML = html;
+  if (n) {
+    h += lab(0, db && n === 1 ? 'cabeza/cola' : mu ? 'cabeza (A-Z)' : 'cabeza', 0, '');
+    if (db && n > 1) h += lab(n - 1, 'cola', 0, '');
+    if (db) { s += P(`M${xs(0)} ${Y0 + H * .72}H${xs(0) - 22}`, 'pm', 'mm'); h += nul(2, Y0 + H * .72); } // anterior de la cabeza = null
+  }
+  if (ci && n) {                                               // arco de retorno del último a la cabeza
+    const xl = xs(n - 1) + W * .6, xf = xs(0) + W * .4;
+    s += P(`M${xl} ${yb}C${xl} ${yb + 52} ${xf} ${yb + 52} ${xf} ${yb + 3}`, 'pa', 'ma') + `<text x="${(xl + xf) / 2}" y="${yb + 48}" text-anchor="middle" class="tx">último.sig = cabeza (${L[0].ad})</text>`;
+  }
+  if (mu) {                                                    // segunda fila corta: la cadena por edad, de menor a mayor
+    h += `<div class="row" style="top:${yb + 16}px"><b>Por edad:</b> cabezaEdad →` + (E.length ? E.map(e => ` <span class="chip ${f.hi[e.u] || ''}">${esc(e.nom)} (${e.edad})</span> →`).join('') : '') + ` NULL</div>`;
+  }
+  if (f.nw) h += box(f.nw, xs(Math.min(f.nw.at || 0, n)), 4, 'new float', db ? ['ant: ?', 'sig: ?'] : mu ? ['sigNom: ?', 'sigEdad: ?'] : ['sig: ?']); // nodo aún sin enlazar
+  const st = $('stg');
+  st.style.width = Math.max(380, xs(n) + 40) + 'px';
+  st.style.height = (yb + (mu ? 66 : ci ? 70 : 30)) + 'px';
+  st.innerHTML = `<svg>${s}</svg>${h}`;
+  $('ld').textContent = f.desc;
+  $('lc').textContent = f.code;
+  $('cnt').textContent = `Paso ${cur + 1} / ${steps.length}`;
+  $('st').textContent = `Tamaño: ${n} · cabeza: ${n ? L[0].ad : 'null'}${db ? ` · cola: ${n ? L[n-1].ad : 'null'}` : ''}`;
 }
 
-function renderCadenaCircular(stg, list, hi) {
-  const itemW = 110, gap = 44, top = 30;
-  let html = `<span class="ptr-lbl" style="left:0;top:${top+18}px">cabeza →</span>`;
-  if (!list.length) {
-    html += `<div class="null-box" style="left:70px;top:${top+18}px">NULL</div>`;
-    stg.style.width = '300px'; stg.style.height = '120px';
-    stg.innerHTML = html; return;
-  }
-  list.forEach((e, i) => {
-    const x = 70 + i * (itemW + gap);
-    const cls = hi[e.u] || '';
-    const next = i + 1 < list.length ? list[i+1].ad : list[0].ad;
-    html += `
-      <div class="node ${cls}" style="left:${x}px;top:${top}px;width:${itemW}px">
-        <div class="ad">${e.ad}</div>
-        <div class="val">${e.d}</div>
-        <div class="ptrs">sig: ${next}</div>
-      </div>
-    `;
-    if (i + 1 < list.length) {
-      html += `<div class="arrow" style="left:${x + itemW + 10}px;top:${top+18}px">→</div>`;
-    }
-  });
-
-  // Flecha curva SVG de retorno del último a la cabeza
-  const lastX = 70 + (list.length - 1) * (itemW + gap) + itemW / 2;
-  const firstX = 70 + itemW / 2;
-  const svgW = lastX + 60;
-  html += `
-    <svg style="position:absolute;left:0;top:${top+60}px;width:${svgW}px;height:60px;pointer-events:none">
-      <path d="M ${lastX} 5 C ${lastX} 45, ${firstX} 45, ${firstX} 8" fill="none" stroke="var(--ac)" stroke-width="2" stroke-dasharray="4 3"/>
-      <polygon points="${firstX},2 ${firstX-4},10 ${firstX+4},10" fill="var(--ac)"/>
-      <text x="${(lastX + firstX)/2}" y="42" fill="var(--ac)" font-size="11" font-weight="bold" text-anchor="middle">Retorno a cabeza (${list[0].ad})</text>
-    </svg>
-  `;
-
-  stg.style.width = Math.max(340, svgW + 40) + 'px';
-  stg.style.height = '160px';
-  stg.innerHTML = html;
+// ============================ EVENTOS ============================
+// Lee los campos, valida y lanza la operación de las listas numéricas
+function opNum(a) {
+  const t = $('v').value.trim(), v = Number(t);
+  if (t === '' && (a === 'del' || a === 'bus')) return msg('Escribe el valor en el campo.');
+  if (t !== '' && !Number.isInteger(v)) return msg('Escribe un número entero.');
+  if (a === 'fin' || a === 'ini') {
+    if (lst().length >= MAX) return msg(`Máximo ${MAX} nodos para que el dibujo quepa. Elimina o vacía la lista.`);
+    (a === 'fin' ? insFin : insIni)(t === '' ? 10 + Math.floor(Math.random() * 90) : v);
+    $('v').value = '';
+  } else if (a === 'del') del(v);
+  else if (a === 'bus') bus(v);
+  else trav(a === 'inv', false);
 }
-
-function renderCadenaMulti(stg, list, hi) {
-  const itemW = 150, gap = 50;
-  if (!list.length) {
-    stg.style.width = '340px'; stg.style.height = '140px';
-    stg.innerHTML = `
-      <span class="ptr-lbl" style="left:0;top:30px">cabeza (A-Z) →</span><div class="null-box" style="left:110px;top:26px">NULL</div>
-      <span class="ptr-lbl ptr-edad" style="left:0;top:80px">cabezaEdad →</span><div class="null-box" style="left:110px;top:76px">NULL</div>
-    `;
-    return;
-  }
-
-  // Orden alfabético (por list) y Orden por edad
-  const listEdad = [...list].sort((a,b) => a.edad - b.edad);
-  
-  let html = `
-    <div style="font-weight:700;font-size:12px;color:var(--ac);margin-bottom:6px">
-      [Criterio 1: Alfabético A-Z (Pista Azul)]
-    </div>
-  `;
-
-  // Renderizar personas en orden alfabético
-  list.forEach((e, i) => {
-    const x = 70 + i * (itemW + gap);
-    const cls = hi[e.u] || '';
-    const nextAlfa = i + 1 < list.length ? list[i+1].nom : 'null';
-    
-    // Buscar siguiente en edad
-    const idxEdad = listEdad.findIndex(x => x.u === e.u);
-    const nextEdad = idxEdad + 1 < listEdad.length ? `${listEdad[idxEdad+1].nom} (${listEdad[idxEdad+1].edad})` : 'null';
-
-    html += `
-      <div class="node ${cls}" style="left:${x}px;top:30px;width:${itemW}px">
-        <div class="ad">${e.ad}</div>
-        <div class="val">${e.nom} <span style="font-size:12px;color:var(--gr)">(${e.edad} años)</span></div>
-        <div class="ptrs">
-          <span style="color:var(--ac)">sigAlfa: ${nextAlfa}</span>
-          <span style="color:var(--gr)">sigEdad: ${nextEdad}</span>
-        </div>
-      </div>
-      <div class="arrow" style="left:${x + itemW + 10}px;top:48px">${i + 1 < list.length ? '→' : '→ <span class="null-box">NULL</span>'}</div>
-    `;
-  });
-
-  // Mostrar el orden de edades abajo en una cajita informativa
-  html += `
-    <div style="position:absolute;left:10px;top:130px;font-size:12px;color:var(--gr);font-weight:700">
-      [Criterio 2: Secuencia ordenada por Edad (Pista Verde)]:
-    </div>
-    <div style="position:absolute;left:10px;top:150px;font:12px ui-monospace,Menlo,monospace;color:var(--fg);display:flex;gap:10px;align-items:center">
-      <span class="ptr-lbl ptr-edad" style="position:static">cabezaEdad →</span>
-  `;
-  listEdad.forEach((e, i) => {
-    html += `<span style="background:var(--box);border:1px solid var(--gr);padding:2px 8px;border-radius:4px;font-weight:600">${e.nom} (${e.edad})</span>`;
-    html += `<span>${i + 1 < listEdad.length ? '→' : '→ NULL'}</span>`;
-  });
-  html += `</div>`;
-
-  stg.style.width = Math.max(450, 70 + list.length * (itemW + gap) + 60) + 'px';
-  stg.style.height = '190px';
-  stg.innerHTML = html;
+// Lo mismo para la multilista
+function opMulti(a) {
+  const nom = $('nm').value.trim(), t = $('ed').value.trim(), ed = t === '' ? 15 + Math.floor(Math.random() * 40) : Number(t);
+  if (a === 'ins') {
+    if (D.multi.length >= MAX) return msg(`Máximo ${MAX} nodos para que el dibujo quepa.`);
+    if (!Number.isInteger(ed) || ed < 1 || ed > 120) return msg('La edad debe ser un entero entre 1 y 120.');
+    insMulti(nom || 'Persona' + (D.multi.length + 1), ed);
+    $('nm').value = $('ed').value = '';
+  } else if (a === 'del' || a === 'bus') {
+    if (!nom) return msg('Escribe el nombre en el campo.');
+    (a === 'del' ? delMulti : busM)(nom);
+  } else trav(false, a === 'age');
 }
-
-// =============================================================================
-// EVENTOS Y CONTROLES DE LA INTERFAZ
-// =============================================================================
-
-// Cambio de Pestañas
-document.querySelectorAll('.tab').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
-    btn.classList.add('on');
-    mode = btn.dataset.m;
-
-    // Ajustar visibilidad de controles
-    if (mode === 'multi') {
-      $('ctlNum').style.display = 'none';
-      $('ctlMulti').style.display = 'flex';
-    } else {
-      $('ctlNum').style.display = 'flex';
-      $('ctlMulti').style.display = 'none';
-      $('bRev').style.display = (mode === 'doble') ? 'inline-block' : 'none';
-    }
-    steps = []; stepIdx = 0;
-    render({ desc: `Modo cambiado a ${btn.textContent}`, code: `// Estructura activa: ${mode}`, sn: snap() });
-  };
+function run(a) {
+  msg('');
+  if (a === 'pp') { paused = !paused; $('pp').textContent = paused ? '▶ Reanudar' : '⏸ Pausar'; return; }
+  if (a === 'pv' || a === 'nx') { paused = true; $('pp').textContent = '▶ Reanudar'; go(cur + (a === 'nx' ? 1 : -1)); return; }
+  if (a === 'rp') { start(); return; }
+  if (a === 'vac') { D[mode] = []; idle('Lista vaciada.'); return; }
+  if (a === 'ej') {                                            // ejemplo animado: inserta varios nodos uno tras otro
+    D[mode] = []; steps = [];                                  // parte de una lista vacía
+    F('Lista vacía: se insertarán varios nodos, uno por uno, para ver cómo se arma.', '// Ejemplo: inserciones sucesivas');
+    if (mode === 'multi') [['Carlos',25],['Ana',30],['Beto',18],['Diana',22]].forEach(([x, e]) => insMulti(x, e)); // desordenados a propósito
+    else { const S = {simple:[30,10,40,20], doble:[35,15,45,25], circular:[16,5,12,8]}; S[mode].forEach(v => insFin(v)); }
+    F(mode === 'multi' ? 'Ejemplo terminado: la cadena A-Z quedó ordenada por nombre y la fila de abajo por edad.' : 'Ejemplo terminado. Prueba insertar, buscar o eliminar.', '// Fin del ejemplo');
+    start(); return;
+  }
+  const old = steps; steps = [];                               // si la operación no genera cuadros (error), se conserva la vista anterior
+  (mode === 'multi' ? opMulti : opNum)(a);
+  if (steps.length) start(); else steps = old;
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (b) run(b.dataset.a); });
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {   // cambio de pestaña
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+  mode = b.dataset.m; msg('');
+  $('cN').hidden = mode === 'multi'; $('cM').hidden = mode !== 'multi'; $('inv').hidden = mode !== 'doble';
+  $('info').textContent = INFO[mode];
+  idle(`Lista ${b.textContent.slice(3).toLowerCase()}: ${lst().length ? 'datos conservados.' : 'vacía. Inserta un nodo o usa «Ejemplo rápido».'}`);
 });
-
-// Botones de Operación
-$('bInsFin').onclick = () => {
-  const v = parseInt($('inDato').value || Math.floor(Math.random() * 90 + 10));
-  if (mode === 'simple') simInsertarSimpleFin(v);
-  else if (mode === 'doble') simInsertarDoble(v);
-  else if (mode === 'circular') simInsertarCircular(v);
+// Enter inserta. Las llaves evitan devolver `false`, que bloqueaba la escritura de las demás teclas
+$('v').onkeydown = e => { if (e.key === 'Enter') run('fin'); };
+$('nm').onkeydown = $('ed').onkeydown = e => { if (e.key === 'Enter') run('ins'); };
+$('spd').onchange = play;
+$('tbtn').onclick = () => {                                    // alterna tema claro/oscuro
+  const r = document.documentElement, dark = (r.dataset.theme || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light')) === 'dark';
+  r.dataset.theme = dark ? 'light' : 'dark';
 };
-
-$('bInsIni').onclick = () => {
-  const v = parseInt($('inDato').value || Math.floor(Math.random() * 90 + 10));
-  if (mode === 'simple') simInsertarSimpleIni(v);
-  else if (mode === 'doble') simInsertarDoble(v);
-  else if (mode === 'circular') simInsertarCircular(v);
-};
-
-$('bElim').onclick = () => {
-  const v = parseInt($('inDato').value);
-  if (isNaN(v)) { alert('Escribe el valor numérico a eliminar en el campo.'); return; }
-  if (mode === 'simple') simEliminarSimple(v);
-  else alert('Operación demostrada principalmente en Lista Simple y Multilista.');
-};
-
-$('bBuscar').onclick = () => {
-  const v = parseInt($('inDato').value);
-  if (isNaN(v)) { alert('Escribe el valor a buscar.'); return; }
-  steps = []; stepIdx = 0;
-  const list = mode === 'simple' ? L_Simple : mode === 'doble' ? L_Doble : L_Circ;
-  let found = false;
-  for (let i = 0; i < list.length; i++) {
-    F(`Comparando nodo en ${list[i].ad}: ¿${list[i].d} == ${v}?`, `if (actual.getDato() == ${v})`, {[list[i].u]: 'cmp'});
-    if (list[i].d === v) {
-      F(`¡Elemento ${v} encontrado en ${list[i].ad}!`, `return true; // Encontrado`, {[list[i].u]: 'found'});
-      found = true; break;
-    }
-  }
-  if (!found) F(`Elemento ${v} no existe en la lista`, `return false; // Fin de lista`, {});
-  play();
-};
-
-$('bRev').onclick = () => {
-  if (mode === 'doble') simRecorridoInversoDoble();
-};
-
-// Controles Multilista
-$('bInsMulti').onclick = () => {
-  const nom = ($('inNom').value || 'Persona' + (L_Multi.length + 1)).trim();
-  const edad = parseInt($('inEdad').value || Math.floor(Math.random() * 40 + 15));
-  simInsertarMulti(nom, edad);
-  $('inNom').value = ''; $('inEdad').value = '';
-};
-
-$('bElimMulti').onclick = () => {
-  const nom = $('inNom').value.trim();
-  if (!nom) { alert('Escribe el nombre de la persona a eliminar.'); return; }
-  simEliminarMulti(nom);
-};
-
-$('bBuscarMulti').onclick = () => {
-  const nom = $('inNom').value.trim();
-  if (!nom) { alert('Escribe el nombre a buscar.'); return; }
-  steps = []; stepIdx = 0;
-  let found = false;
-  for (let i = 0; i < L_Multi.length; i++) {
-    F(`Comparando alfabéticamente en ${L_Multi[i].ad}: ¿"${L_Multi[i].nom}" == "${nom}"?`, 
-      `if (actualAlfa.getNombre().equalsIgnoreCase("${nom}"))`, {[L_Multi[i].u]: 'cmp'});
-    if (L_Multi[i].nom.toLowerCase() === nom.toLowerCase()) {
-      F(`¡Persona "${L_Multi[i].nom}" encontrada en ${L_Multi[i].ad}!`, `return true;`, {[L_Multi[i].u]: 'found'});
-      found = true; break;
-    }
-  }
-  if (!found) F(`La persona "${nom}" no existe en la Multilista`, `return false;`, {});
-  play();
-};
-
-// Ejemplo Rápido
-$('bEjemplo').onclick = () => {
-  if (mode === 'multi') {
-    L_Multi = [];
-    simInsertarMulti('Carlos', 25);
-    simInsertarMulti('Ana', 30);
-    simInsertarMulti('Beto', 18);
-    simInsertarMulti('Diana', 22);
-  } else {
-    if (mode === 'simple') { L_Simple = []; [10, 20, 30, 40].forEach(v => simInsertarSimpleFin(v)); }
-    else if (mode === 'doble') { L_Doble = []; [15, 25, 35].forEach(v => simInsertarDoble(v)); }
-    else if (mode === 'circular') { L_Circ = []; [5, 8, 12, 16].forEach(v => simInsertarCircular(v)); }
-  }
-};
-
-$('bVaciar').onclick = () => {
-  if (mode === 'simple') L_Simple = [];
-  else if (mode === 'doble') L_Doble = [];
-  else if (mode === 'circular') L_Circ = [];
-  else if (mode === 'multi') L_Multi = [];
-  steps = []; stepIdx = 0;
-  render({ desc: 'Lista vaciada.', code: 'cabeza = null; tamano = 0;', sn: snap() });
-};
-
-// Controles de Animación
-$('bPause').onclick = () => {
-  isPaused = !isPaused;
-  $('bPause').textContent = isPaused ? 'Reanudar' : 'Pausar';
-};
-
-$('bStep').onclick = () => {
-  isPaused = true;
-  $('bPause').textContent = 'Reanudar';
-  nextStep();
-};
-
-// Tema Claro/Oscuro
-$('tbtn').onclick = () => {
-  const cur = document.documentElement.getAttribute('data-theme');
-  const nxt = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', nxt);
-};
-
-// Inicialización
-render({ desc: 'Simulador iniciado. Inserta un nodo o presiona "Ejemplo rápido".', code: '// Listo para simular', sn: snap() });
+$('info').textContent = INFO.simple;
+idle('Simulador listo. Inserta un nodo o presiona «Ejemplo rápido».');
 </script>
 </body>
 </html>
