@@ -4,8 +4,8 @@ import listas.ListaSimple;
 import listas.ListaMulti;
 // [INTEGRANTE KAREN - PENDIENTE DE ENTREGA]:
 // Descomentar cuando Karen entregue ListaDoble y ListaCircular:
-// import listas.ListaDoble;
-// import listas.ListaCircular;
+import listas.ListaDoble;
+import listas.ListaCircular;
 
 /**
  * Banco de pruebas automatizadas y sincronizadas con el Reporte Formal de Pruebas.
@@ -104,56 +104,106 @@ public class PruebasListas {
      * Plantilla de pruebas para Lista Doblemente Enlazada (Karen).
      * Casos: CP-DOB-01 y CP-DOB-02
      */
-    public static void probarListaDoble() {
+ public static void probarListaDoble() {
         System.out.println("==================================================");
-        System.out.println("   BANCO DE PRUEBAS: LISTA DOBLE (Karen)");
-        System.out.println("   [ESTADO: PENDIENTE DE ENTREGA POR INTEGRANTE 2]");
+        System.out.println("   BANCO DE PRUEBAS: LISTA DOBLE (yo)");
         System.out.println("==================================================");
-
-        System.out.println("[CP-DOB-01] Inserción bidireccional (15, 25): ⏳ PENDIENTE (Karen)");
-        System.out.println("[CP-DOB-02] Recorrido inverso (mostrarInverso()): ⏳ PENDIENTE (Karen)\n");
-
-        /*
-        // IMPLEMENTACIÓN AL RECIBIR LA CLASE DE KAREN:
         ListaDoble lista = new ListaDoble();
-        
-        // CP-DOB-01: Inserción bidireccional
+
+        System.out.print("[CP-DOB-01] Insercion en lista vacia (15)... ");
         lista.insertar(15);
+        assert lista.getTamano() == 1 : "Error DOB-01";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-02] Insercion multiple (25, 35)... ");
         lista.insertar(25);
-        assert lista.getTamano() == 2 : "CP-DOB-01 Error";
+        lista.insertar(35);
+        assert lista.getTamano() == 3 : "Error DOB-02";
+        System.out.println("✅ Aprobado");
 
-        // CP-DOB-02: Recorrido inverso
+        System.out.print("[CP-DOB-03] Insercion al inicio (5)... ");
+        lista.insertarAlInicio(5);
+        assert lista.getTamano() == 4 : "Error DOB-03";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-04] Recorrido hacia adelante... ");
+        lista.mostrar();
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-05] Recorrido inverso... ");
         lista.mostrarInverso();
-        */
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-06] Busqueda (25)... ");
+        assert lista.buscar(25) : "Error DOB-06";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-07] Eliminacion al inicio... ");
+        lista.eliminarAlInicio();
+        assert lista.getTamano() == 3 : "Error DOB-07";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-08] Eliminacion al final... ");
+        lista.eliminarAlFinal();
+        assert lista.getTamano() == 2 : "Error DOB-08";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-DOB-09] Vaciado completo... ");
+        lista.vaciar();
+        assert lista.estaVacia() : "Error DOB-09";
+        System.out.println("✅ Aprobado\n");
     }
-
-    /**
-     * Plantilla de pruebas para Lista Circular (Karen).
-     * Casos: CP-CIR-01 y CP-CIR-02
-     */
-    public static void probarListaCircular() {
+   
+       public static void probarListaCircular() {
         System.out.println("==================================================");
-        System.out.println("   BANCO DE PRUEBAS: LISTA CIRCULAR (Karen)");
-        System.out.println("   [ESTADO: PENDIENTE DE ENTREGA POR INTEGRANTE 2]");
+        System.out.println("   BANCO DE PRUEBAS: LISTA CIRCULAR (yo)");
         System.out.println("==================================================");
-
-        System.out.println("[CP-CIR-01] Cierre de ciclo circular (5, 8): ⏳ PENDIENTE (Karen)");
-        System.out.println("[CP-CIR-02] Recorrido sin bucle infinito (mostrar()): ⏳ PENDIENTE (Karen)\n");
-
-        /*
-        // IMPLEMENTACIÓN AL RECIBIR LA CLASE DE KAREN:
         ListaCircular lista = new ListaCircular();
-        
-        // CP-CIR-01: Cierre de ciclo
+
+        System.out.print("[CP-CIR-01] Cierre de ciclo circular (5, 8)... ");
         lista.insertar(5);
         lista.insertar(8);
         assert lista.getTamano() == 2 : "CP-CIR-01 Error";
+        System.out.println("✅ Aprobado");
 
-        // CP-CIR-02: Recorrido acotado a 'tamano'
+        System.out.print("[CP-CIR-02] Recorrido sin bucle infinito... ");
         lista.mostrar();
-        */
-    }
+        System.out.println("✅ Aprobado");
 
+        System.out.print("[CP-CIR-03] Insercion al inicio (1)... ");
+        lista.insertarAlInicio(1);
+        assert lista.getTamano() == 3 : "CP-CIR-03 Error";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-CIR-04] Insercion multiple (10, 15)... ");
+        lista.insertar(10);
+        lista.insertar(15);
+        assert lista.getTamano() == 5 : "CP-CIR-04 Error";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-CIR-05] Busqueda existente (8)... ");
+        assert lista.buscar(8) : "CP-CIR-05 Error";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-CIR-06] Busqueda inexistente (99)... ");
+        assert !lista.buscar(99) : "CP-CIR-06 Error";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-CIR-07] Eliminacion al inicio... ");
+        lista.eliminarAlInicio();
+        assert lista.getTamano() == 4 : "CP-CIR-07 Error";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-CIR-08] Eliminacion al final... ");
+        lista.eliminarAlFinal();
+        assert lista.getTamano() == 3 : "CP-CIR-08 Error";
+        System.out.println("✅ Aprobado");
+
+        System.out.print("[CP-CIR-09] Vaciado completo... ");
+        lista.vaciar();
+        assert lista.estaVacia() : "CP-CIR-09 Error";
+        System.out.println("✅ Aprobado -> vacia\n");
+    }
     /**
      * Valida exhaustivamente el comportamiento de la Multilista de Personas (Cristian).
      * Casos: CP-MUL-01 al CP-MUL-14
@@ -284,10 +334,10 @@ public class PruebasListas {
         // 1. Pruebas Lista Simple (Fátima)
         probarListaSimple();
 
-        // 2. Pruebas Lista Doble (Karen - Pendiente)
+        // 2. Pruebas Lista Doble (yo)
         probarListaDoble();
 
-        // 3. Pruebas Lista Circular (Karen - Pendiente)
+        // 3. Pruebas Lista Circular (yo)
         probarListaCircular();
 
         // 4. Pruebas Multilista (Cristian)
