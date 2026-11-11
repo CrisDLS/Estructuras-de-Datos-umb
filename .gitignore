@@ -60,9 +60,10 @@ ENV/
 *.sln.docstates
 
 # ==========================================
-# Sistema Operativo y Basura Local
+# Sistema Operativo, Documentos Temporales y Basura Local
 # ==========================================
 .DS_Store
 Thumbs.db
 desktop.ini
 *.log
+*.pdf
