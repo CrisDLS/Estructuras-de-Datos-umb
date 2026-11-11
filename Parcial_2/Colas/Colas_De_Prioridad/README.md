@@ -1,4 +1,4 @@
-# ⚡ Proyecto 1: Colas de Prioridad Multilenguaje
+# ⚡ Colas de Prioridad Multilenguaje
 **Segundo Parcial — Estructura de Datos (UMB)**
 
 Implementación comparativa y modular del Tipo de Dato Abstracto (TDA) **Cola de Prioridad (Priority Queue)** bajo tres enfoques algorítmicos distintos y desarrollado en **tres lenguajes de programación**.
@@ -9,9 +9,9 @@ Implementación comparativa y modular del Tipo de Dato Abstracto (TDA) **Cola de
 
 | Lenguaje | Integrante Responsable | Módulos e Implementaciones | Directorio |
 | :---: | :--- | :--- | :---: |
-| **C++** | Cristian | Nodos, Arreglo, Binary Heap y consola interactiva | [`cpp/`](cpp/) |
-| **Python** | Fatima | Clase ColaPrioridad y menú interactivo de consola | [`python/`](python/) |
-| **Java** | Karen | Nodos, Arreglo, simulador por consola y visual | [`java/`](java/) |
+| **C++** | Cristian | Nodos, Arreglo, Binary Heap y consola interactiva | [`src_c++/`](src_c++/) |
+| **Python** | Fatima | Clase ColaPrioridad y menú interactivo de consola | [`src_python/`](src_python/) |
+| **Java** | Karen | Nodos, Arreglo, simulador por consola y visual | [`src_java/`](src_java/) |
 
 ---
 
@@ -32,6 +32,6 @@ Este proyecto incluye un simulador visual en navegador:
 
 ## 🚀 Guías de Compilación y Ejecución por Lenguaje
 
-* **C++:** Revisa las instrucciones en [`cpp/README.md`](cpp/README.md).
-* **Python:** Revisa las instrucciones en [`python/README.md`](python/README.md).
-* **Java:** Revisa las instrucciones en [`java/README.md`](java/README.md).
+* **C++:** Revisa las instrucciones en [`src_c++/README.md`](src_c++/README.md).
+* **Python:** Revisa las instrucciones en [`src_python/README.md`](src_python/README.md).
+* **Java:** Revisa las instrucciones en [`src_java/README.md`](src_java/README.md).
