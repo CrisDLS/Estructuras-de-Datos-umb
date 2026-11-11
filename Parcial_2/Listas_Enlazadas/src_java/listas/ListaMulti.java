@@ -29,8 +29,6 @@ import nodos.NodoMulti;
  * de ambas dimensiones a la vez, manteniendo un único contador de {@code tamano}
  * y previniendo fugas de memoria o punteros huérfanos.
  * 
- * @author Cristian (Integrante 3)
- * @version 2.0 (Modelo de Personas: Nombre + Edad)
  */
 public class ListaMulti extends ListaEnlazada {
 

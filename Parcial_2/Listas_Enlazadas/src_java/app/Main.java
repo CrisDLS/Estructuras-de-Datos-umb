@@ -70,6 +70,8 @@ public class Main {
     }
 
     static void interactivo(Scanner in) {
+        ListaEnlazada lista = null;
+        while (lista == null) {
         System.out.println("\n--- SELECCIÓN DE ESTRUCTURA ---");
         System.out.println("1) Lista Simple");
         System.out.println("2) Multilista: Personas [Nombre + Edad]");
@@ -77,26 +79,34 @@ public class Main {
         System.out.println("4) Lista Circular");
         System.out.print("Elige una opción: ");
 
-        int tipo = in.nextInt();
-        ListaEnlazada lista;
-        switch (tipo) {
-            case 2:
-                lista = new ListaMulti();
-                System.out.println("\n-> Has seleccionado: Multilista de Personas (Doble Criterio: Alfabético y Edad).");
-                break;
-            case 3:
-                lista = new ListaDoble();
-                System.out.println("\n-> Has seleccionado: Lista Doblemente Enlazada.");
-                break;
-            case 4:
-                lista = new ListaCircular();
-                System.out.println("\n-> Has seleccionado: Lista Circular.");
-                break;
-            default:
-                lista = new ListaSimple();
-                System.out.println("\n-> Has seleccionado: Lista Simple.");
+        try{
+            int tipo = in.nextInt();
+            
+            switch (tipo) {
+                case 1:
+                    lista = new ListaSimple();
+                    System.out.println("\n-> Has seleccionado: Lista Simple.");
+                    break;
+                case 2:
+                    lista = new ListaMulti();
+                    System.out.println("\n-> Has seleccionado: Multilista de Personas (Doble Criterio: Alfabético y Edad).");
+                    break;
+                case 3:
+                    lista = new ListaDoble();
+                    System.out.println("\n-> Has seleccionado: Lista Doblemente Enlazada.");
+                    break;
+                case 4:
+                    lista = new ListaCircular();
+                    System.out.println("\n-> Has seleccionado: Lista Circular.");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Por favor, ingresa un número del 1 al 4.");
+            }
+        } catch (Exception e) {
+            System.out.println("Entrada inválida. Por favor, ingresa un número del 1 al 4.");
+            in.next(); // Limpiar entrada errónea
         }
-
+        }
         int op;
         do {
             System.out.println("\n----------------------------------------");
