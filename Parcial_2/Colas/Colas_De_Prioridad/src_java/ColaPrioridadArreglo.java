@@ -11,9 +11,14 @@ public class ColaPrioridadArreglo<T> implements ColaPrioridad<T> {
         tamano = 0;
     }
 
+    // Función auxiliar agregada para verificar si el arreglo alcanzó su capacidad máxima
+    public boolean estaLlena() {
+        return tamano == datos.length;
+    }
+
     @Override
     public void insertar(T dato, int prioridad) {
-        if (tamano == datos.length) {
+        if (estaLlena()) {
             System.out.println("Cola llena");
             return;
         }
