@@ -15,6 +15,7 @@ Directorio raíz que agrupa todas las variantes del Tipo de Dato Abstracto (TDA)
 ## 📊 Matriz de Implementación por Variante y Lenguaje
 
 * **Criterio Técnico:** En **C++ y Java** (tipado fuerte), las colas se implementan mediante **Arreglos** y mediante **Nodos Enlazados** (además de Binary Heap en Prioridad). En **Python** (tipado dinámico), donde `list` es dinámica de forma nativa, se emplea un archivo único autocontenido.
+* **📖 Cuadro Comparativo Multilenguaje:** Consulta [`TABLA_COMPARATIVA_COLAS.md`](TABLA_COMPARATIVA_COLAS.md) para ver las 8 tablas comparativas lado a lado (`C++` vs `Java` vs `Python`) de todas las implementaciones de colas con arreglos y con nodos.
 
 | Variante de Cola | Directorio | `src_c++` | `src_java` | `src_python` | Créditos / Origen |
 | :--- | :---: | :---: | :---: | :---: | :--- |
@@ -30,6 +31,7 @@ Directorio raíz que agrupa todas las variantes del Tipo de Dato Abstracto (TDA)
 ```text
 Colas/
 ├── README.md                                  # Índice central del módulo de Colas
+├── TABLA_COMPARATIVA_COLAS.md                 # Cuadro comparativo de métodos (C++ vs Java vs Python)
 │
 ├── Colas_De_Prioridad/                        # Equipo Principal (Cristian, Karen y Fátima)
 │   ├── README.md

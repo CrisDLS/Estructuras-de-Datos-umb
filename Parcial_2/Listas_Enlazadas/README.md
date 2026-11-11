@@ -9,6 +9,7 @@ Implementación modular y orientada a objetos de la jerarquía de **Listas Enlaz
 
 * **Equipo Principal (Cristian, Karen y Fátima):** Responsables del proyecto modular en **Java (`src_java/`)** y del simulador interactivo web.
 * **Aportación de otros equipos:** Las implementaciones en **Python (`src_python/`)** y **C++ (`src_c++/`)** corresponden a aportaciones de otros equipos del grupo, adaptadas y estandarizadas a la arquitectura oficial del repositorio.
+* **📖 Cuadro Comparativo Multilenguaje:** Consulta [`TABLA_COMPARATIVA_LISTAS.md`](TABLA_COMPARATIVA_LISTAS.md) para ver las tablas comparativas lado a lado (`C++` vs `Java` vs `Python`) de la Clase Base Abstracta, Lista Simple, Lista Doble, Lista Circular y Multilista.
 
 | Lenguaje | Directorio | Estado | Créditos / Origen | Contenido Principal |
 | :---: | :---: | :---: | :--- | :--- |
@@ -23,6 +24,7 @@ Implementación modular y orientada a objetos de la jerarquía de **Listas Enlaz
 ```text
 Listas_Enlazadas/
 ├── README.md                                  # Índice general del proyecto de Listas Enlazadas
+├── TABLA_COMPARATIVA_LISTAS.md                # Cuadro comparativo de métodos (C++ vs Java vs Python)
 ├── Simulador de listas enlazadas.html         # Simulador visual interactivo en navegador
 │
 ├── src_java/                                  # Equipo Principal (Cristian, Karen y Fátima)
